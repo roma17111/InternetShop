@@ -15,8 +15,6 @@
     <description>homework</description>
     <properties>
         <java.version>11</java.version>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -50,16 +48,6 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.pythagoras.common</groupId>
-            <artifactId>swagger-ui</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>net.hamnaberg</groupId>
-            <artifactId>openapi-schema-core_2.13</artifactId>
-            <version>0.2.0</version>
         </dependency>
     </dependencies>
 
