@@ -10,8 +10,14 @@ import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private final List<RegisterReq> users = new ArrayList<>();
 
     private final UserDetailsManager manager;
 
@@ -20,6 +26,11 @@ public class AuthServiceImpl implements AuthService {
     public AuthServiceImpl(UserDetailsManager manager) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
+    }
+
+    @Override
+    public List<RegisterReq> getAllUsers() {
+        return Collections.unmodifiableList(users);
     }
 
     @Override
