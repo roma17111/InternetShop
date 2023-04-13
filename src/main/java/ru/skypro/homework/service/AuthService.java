@@ -6,6 +6,8 @@ import ru.skypro.homework.dto.Role;
 import java.util.List;
 
 public interface AuthService {
+    void addUser(RegisterReq user);
+
     List<RegisterReq> getAllUsers();
 
     boolean login(String userName, String password);

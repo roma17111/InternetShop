@@ -17,15 +17,25 @@ import java.util.List;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final List<RegisterReq> users = new ArrayList<>();
+    private final static List<RegisterReq> users = new ArrayList<>();
 
     private final UserDetailsManager manager;
 
     private final PasswordEncoder encoder;
 
+
+
     public AuthServiceImpl(UserDetailsManager manager) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
+    }
+
+    public static List<RegisterReq> getUsers() {
+        return users;
+    }
+    @Override
+    public void addUser(RegisterReq user) {
+        users.add(user);
     }
 
     @Override
@@ -56,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
                         .roles(role.name())
                         .build()
         );
+        addUser(registerReq);
         return true;
     }
 }
