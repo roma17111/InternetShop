@@ -48,6 +48,7 @@ fi
 
 while true; do
     echo -e "\n\n"
+    echo "============================================"
     echo "1. Stop the container"
     echo "2. Start the container again"
     echo "3. Open the link in the browser"
@@ -55,6 +56,7 @@ while true; do
     echo "5. Check for a newer version of the image"
     echo "6. Remove the Docker image"
     echo "7. Exit"
+    echo "============================================"
     echo -e "\nEnter your choice:"
     read choice
     
