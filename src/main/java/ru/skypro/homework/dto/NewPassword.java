@@ -10,4 +10,5 @@ import lombok.experimental.FieldDefaults;
 public class NewPassword {
     String currentPassword;
     String newPassword;
+
 }
