@@ -31,14 +31,14 @@ public class WebSecurityConfig {
             UserDetails user1 = User.withDefaultPasswordEncoder()
                     .username(user.getUsername())
                     .password(user.getPassword())
-                    .roles("USER")
+                    .roles(user.getRole().name())
                     .build();
             return new InMemoryUserDetailsManager(user1);
         }
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user@gmail.com")
                 .password("password")
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
