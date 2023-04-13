@@ -1,22 +1,23 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.service.AuthService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
-    private final static List<User> users = new ArrayList<>();
+    private final static List<RegisterReq> users = new ArrayList<>();
 
     private final UserDetailsManager manager;
 
@@ -24,42 +25,22 @@ public class UserServiceImpl implements UserService {
 
 
 
-    public UserServiceImpl(UserDetailsManager manager) {
+    public AuthServiceImpl(UserDetailsManager manager) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
     }
 
-    public static List<User> getUsers() {
+    public static List<RegisterReq> getUsers() {
         return users;
     }
     @Override
-    public void addUser(User user) {
+    public void addUser(RegisterReq user) {
         users.add(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<RegisterReq> getAllUsers() {
         return Collections.unmodifiableList(users);
-    }
-
-    @Override
-    public boolean isExistsUser(String userName) {
-        for (User user : getAllUsers()) {
-            if (user.getUsername().equals(userName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public User findUserByUserName(String userName) {
-        for (User user : getAllUsers()) {
-            if (userName.equals(user.getUsername())) {
-                return user;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -74,14 +55,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(User user) {
-        if (findUserByUserName(user.getUsername())!=null) {
+    public boolean register(RegisterReq registerReq, Role role) {
+        if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-        user.getRole().add(Role.USER);
-
-        System.out.println(user);
-        addUser(user);
+        manager.createUser(
+                User.withDefaultPasswordEncoder()
+                        .password(registerReq.getPassword())
+                        .username(registerReq.getUsername())
+                        .roles(registerReq.getRole().name())
+                        .build()
+        );
+        System.out.println(registerReq);
+        addUser(registerReq);
         return true;
     }
 }

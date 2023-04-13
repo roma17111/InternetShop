@@ -1,13 +1,16 @@
 package ru.skypro.homework;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.impl.UserServiceImpl;
+import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -24,15 +27,15 @@ public class WebSecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        for (User user : UserServiceImpl.getUsers()) {
-            UserDetails user1 = org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()
+        for (RegisterReq user : AuthServiceImpl.getUsers()) {
+            UserDetails user1 = User.withDefaultPasswordEncoder()
                     .username(user.getUsername())
                     .password(user.getPassword())
-                    .roles("USER")
+                    .roles(user.getRole().name())
                     .build();
             return new InMemoryUserDetailsManager(user1);
         }
-        UserDetails user = org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()
+        UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user@gmail.com")
                 .password("password")
                 .roles("ADMIN")
