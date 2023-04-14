@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,13 +20,16 @@ public class AuthServiceImpl implements AuthService {
 
     private final static List<RegisterReq> users = new ArrayList<>();
 
+    private final UserService userService;
+
     private final UserDetailsManager manager;
 
     private final PasswordEncoder encoder;
 
 
 
-    public AuthServiceImpl(UserDetailsManager manager) {
+    public AuthServiceImpl(UserService userService, UserDetailsManager manager) {
+        this.userService = userService;
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
     }
@@ -66,7 +70,13 @@ public class AuthServiceImpl implements AuthService {
                         .roles(registerReq.getRole().name())
                         .build()
         );
+        ru.skypro.homework.dto.User user
+                = new ru.skypro.homework.dto.User(registerReq.getUsername(),
+                registerReq.getFirstName(),
+                registerReq.getLastName(),
+                registerReq.getPhone());
         System.out.println(registerReq);
+        userService.addUser(user);
         addUser(registerReq);
         return true;
     }
