@@ -3,8 +3,12 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.UserTest;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
 
@@ -24,8 +28,26 @@ public class UserController {
     }
 
     @GetMapping("/users/me")
-    public UserDto getUser(@RequestBody UserDto userDto) {
-        UserDto userDto1 = authService.getUser();
-        return new UserDto("test","test","test","12345678");
+    public RegisterReq getUser() {/*
+
+        UserDto userDto = authService.getUser();
+        System.out.println(userDto);
+        return new UserDto(userDto.getEmail(),
+                userDto.getFirstName(),
+                userDto.getLastName(),
+                userDto.getPhone());
+
+*/
+      /*  return new UserTest(23,
+                "test@test.ru",
+                "Шаган",
+                "Собака","+79030000000","Нет");*/
+        return new RegisterReq("test@test.ru",
+                "password",
+                "Шаган",
+                "Шаганович",
+                "12345",
+                Role.ADMIN);
     }
+
 }

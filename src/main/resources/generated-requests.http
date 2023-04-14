@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
   "username": "user12",
-  "password": "password12"
+  "password": "password12 "
 }
 
 ###

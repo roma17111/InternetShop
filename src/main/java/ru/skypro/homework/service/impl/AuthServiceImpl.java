@@ -23,7 +23,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final static List<RegisterReq> users = new ArrayList<>();
 
-    private final static List<UserDto> usersDto = new ArrayList<>();
+    private final static List<UserDto> usersDto = new ArrayList<>();{
+        usersDto.add(new UserDto("user@gmail.com",
+                "Roman",
+                "Yakimenko", "123456"));
+    }
 
     private final UserDetailsManager manager;
 
