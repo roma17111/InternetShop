@@ -1,5 +1,8 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,6 +11,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.AuthService;
 
 import java.util.ArrayList;
@@ -19,10 +23,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final static List<RegisterReq> users = new ArrayList<>();
 
+    private final static List<UserDto> usersDto = new ArrayList<>();
+
     private final UserDetailsManager manager;
 
     private final PasswordEncoder encoder;
-
 
 
     public AuthServiceImpl(UserDetailsManager manager) {
@@ -33,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
     public static List<RegisterReq> getUsers() {
         return users;
     }
+
     @Override
     public void addUser(RegisterReq user) {
         users.add(user);
@@ -66,8 +72,26 @@ public class AuthServiceImpl implements AuthService {
                         .roles(registerReq.getRole().name())
                         .build()
         );
+        UserDto user = new UserDto(registerReq.getUsername(),
+                registerReq.getFirstName(),
+                registerReq.getLastName(),
+                registerReq.getPhone());
         System.out.println(registerReq);
         addUser(registerReq);
+        usersDto.add(user);
         return true;
+    }
+
+    @Override
+    public UserDto getUser() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        for (UserDto dto : usersDto) {
+            if (principal.getUsername().equals(dto.getEmail())) {
+                return dto;
+            }
+        }
+        return null;
     }
 }
