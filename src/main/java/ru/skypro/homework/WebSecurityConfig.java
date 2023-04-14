@@ -21,20 +21,12 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login", "/register","/users/**"
     };
 
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        for (RegisterReq user : AuthServiceImpl.getUsers()) {
-            UserDetails user1 = User.withDefaultPasswordEncoder()
-                    .username(user.getUsername())
-                    .password(user.getPassword())
-                    .roles(user.getRole().name())
-                    .build();
-            return new InMemoryUserDetailsManager(user1);
-        }
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user@gmail.com")
                 .password("password")
@@ -57,6 +49,7 @@ public class WebSecurityConfig {
                 .httpBasic(withDefaults());
         return http.build();
     }
+
 
 
 }
