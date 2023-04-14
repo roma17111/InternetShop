@@ -15,4 +15,11 @@ public class User {
     String phone;
     // url image
     String image;
+
+    public User(String email, String firstName, String lastName, String phone) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
 }
