@@ -4,7 +4,7 @@
 if ! systemctl is-active --quiet docker; then
     # Start Docker
     echo "Starting Docker..."
-    sudo service docker start
+    sudo systemctl start docker
 fi
 
 # Check if the docker image already exists
@@ -16,10 +16,10 @@ if [ -z "$image_exists" ]; then
     docker pull roman170692/shop
 fi
 
-# Check if a container with the name "shop" already exists
-container_exists=$(docker ps -a --filter name=shop --format "{{.ID}}")
+# Check if any container is using port 3000:3000
+port_check=$(docker ps --format "{{.ID}} {{.Names}}" | grep -E ":[[:space:]]+shop$")
 
-if [ -z "$container_exists" ]; then
+if [ -z "$port_check" ]; then
     # Create and run the first container
     echo "Creating and running the container on port 3000:3000..."
     docker run -d -p 3000:3000 --name shop roman170692/shop
@@ -37,7 +37,7 @@ else
                 echo "Recreating the container on port 3000:3000..."
                 docker run -d -p 3000:3000 --name shop roman170692/shop
                 break
-                elif [ "$recreate_choice" == "n" ]; then
+            elif [ "$recreate_choice" == "n" ]; then
                 break
             else
                 echo "Invalid choice. Please enter 'y' or 'n'."
@@ -55,7 +55,8 @@ while true; do
     echo "4. Remove the container (also running)"
     echo "5. Check for a newer version of the image"
     echo "6. Remove the Docker image"
-    echo "7. Exit"
+    echo "7. Restart init (this will restart script)"
+    echo "8. Exit"
     echo "============================================"
     echo -e "\nEnter your choice:"
     read choice
@@ -139,7 +140,10 @@ while true; do
                 fi
             done
         ;;
-        7) break ;;
+        7)
+            exec "$0"
+        ;;
+        8) break ;;
         *) echo -e "\nInvalid choice. Do you want to exit? (y/n)"
             read exit_choice
             if [ "$exit_choice" == "y" ]; then
