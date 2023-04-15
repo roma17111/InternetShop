@@ -24,7 +24,6 @@ public class WebSecurityConfig {
             "/login", "/register","/users/**"
     };
 
-
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
