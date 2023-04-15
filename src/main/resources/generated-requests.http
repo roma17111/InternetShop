@@ -14,7 +14,7 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-   "username": "user",
+   "username": "user@gmail.com",
    "password": "password",
    "firstName":  " asdad",
    "lastName": " asdad",
@@ -61,7 +61,7 @@ Authorization: Basic user@gmail.com password
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user password
+Authorization: Basic user@gamil.com password
 
 
 ###
@@ -90,7 +90,7 @@ Authorization: Basic user password
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user password
+Authorization: Basic user@gmail.com password
 
 
 
