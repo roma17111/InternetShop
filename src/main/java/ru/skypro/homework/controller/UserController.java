@@ -6,9 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.dto.UserInfo;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
@@ -32,18 +30,14 @@ public class UserController {
                 userInfo.getPhone());
     }
 
+
     @GetMapping("/users/me")
-    public UserDto getUser() {
-        UserDto userDto = authService.getUser();
+    public UserInfo getUser() {
+    //    UserDto userDto = authService.getUser();
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         System.out.println(authentication.isAuthenticated());
-        System.out.println(userDto);
-        return new UserDto(
-                userDto.getEmail(),
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getPhone());
+        return new UserInfo("Test", "test", "12345");
     }
 
 }
