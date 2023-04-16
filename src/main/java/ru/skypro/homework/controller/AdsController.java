@@ -25,6 +25,7 @@ public class AdsController {
                 "https://klike.net/uploads/posts/2019-01/1547623484_4.jpg",
                 1,
                 12345,
+                "Заголовок",
                 "Описание")};
         ResponseWrapperAds adds = new ResponseWrapperAds(1,ads);
         System.out.println(adds);

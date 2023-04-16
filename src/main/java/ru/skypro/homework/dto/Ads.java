@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,16 @@ import lombok.experimental.FieldDefaults;
 public class Ads {
 
     // id автора объявления
-    int author;
+    long author;
+
     // ссылка на картинку объявления
     String image;
+
     // id объявления
-    int pk;
+    long pk;
     int price;
     String title;
 
+    @JsonIgnore
+    String description;
 }

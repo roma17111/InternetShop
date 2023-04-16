@@ -5,10 +5,15 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewPassword {
-    String currentPassword;
-    String newPassword;
 
+    @NotBlank
+    String currentPassword;
+
+    @NotBlank
+    String newPassword;
 }
