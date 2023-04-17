@@ -13,19 +13,5 @@ import ru.skypro.homework.dto.ResponseWrapperAds;
 @RestController
 public class AdsController {
 
-    @GetMapping("/ads")
-    private ResponseWrapperAds getAds() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        System.out.println(authentication.isAuthenticated());
-        AdsDto[] ads = {new AdsDto(1,
-                "https://klike.net/uploads/posts/2019-01/1547623484_4.jpg",
-                1,
-                12345,
-                "Заголовок",
-                "Описание")};
-        ResponseWrapperAds adds = new ResponseWrapperAds(1,ads);
-        System.out.println(adds);
-        return adds;
-    }
+
 }

@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,15 +19,16 @@ import java.time.LocalDateTime;
 public class Comment {
     // id author
     @OneToOne
-    @JoinColumn(name = "id",referencedColumnName = "user_id")
-    UserInfo userInfo;
+    @JoinColumn(name = "author", referencedColumnName = "user_id")
+    UserInfo author;
 
     // url image
     String authorImage;
     String authorFirstName;
-    Timestamp createdAt = Timestamp.valueOf(LocalDateTime.now());
+    int date = new Date().getDate();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @Column(name = "id")
+    int pk;
     String text;
 }

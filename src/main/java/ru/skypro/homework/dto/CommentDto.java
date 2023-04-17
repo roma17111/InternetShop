@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,7 +18,7 @@ public class CommentDto {
     // url image
     String authorImage;
     String authorFirstName;
-    Timestamp createdAt = Timestamp.valueOf(LocalDateTime.now());
+    int date = new Date().getDate();
     int pk;
     String text;
 }
