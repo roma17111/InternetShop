@@ -22,7 +22,6 @@ public class Ads {
     @Column(name = "image_path")
     String image;
 
-    // id объявления
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ads_id")
