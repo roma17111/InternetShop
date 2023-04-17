@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.mdels.UserInfo;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
@@ -19,13 +19,12 @@ public class UserController {
     private final AuthService authService;
 
     @PatchMapping("/users/me")
-    public UserDto updateUser(@RequestBody UserInfo userInfo) {
+    public UserInfo updateUser(@RequestBody UserInfo userInfo) {
         System.out.println("Hello");
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         System.out.println(authentication.isAuthenticated());
-        return new UserDto(
-                userInfo.getFirstName(),
+        return new UserInfo(userInfo.getFirstName(),
                 userInfo.getLastName(),
                 userInfo.getPhone());
     }

@@ -12,6 +12,6 @@ public class ResponseWrapperComment {
 
     //Общее количество комментариев
     int count;
-    List<Comment> results;
+    List<CommentDto> results;
 
 }

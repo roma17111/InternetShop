@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Comment {
+public class CommentDto {
 
     // id author
     int author;

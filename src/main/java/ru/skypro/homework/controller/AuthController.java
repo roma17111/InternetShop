@@ -2,23 +2,14 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.LoginReq;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.AuthService;
-
-import javax.security.auth.login.LoginException;
 
 import static ru.skypro.homework.dto.Role.USER;
 
