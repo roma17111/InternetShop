@@ -1,10 +1,12 @@
 package ru.skypro.homework.mdels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +14,8 @@ import javax.persistence.*;
 public class UserInfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private long id;
 
     @Column(name = "email")
@@ -26,8 +30,9 @@ public class UserInfo {
     @Column(name = "phone")
     private String phone;
 
+    @JsonIgnore
     @Column(name = "reg_date")
-    private String regDate;
+    private String regDate = String.valueOf(LocalDateTime.now());
 
     @Column(name = "image")
     private String image;

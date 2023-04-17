@@ -1,11 +1,13 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +19,8 @@ public class UserInfoDto {
     private String firstName;
     private String lastName;
     private String phone;
-    private String regDate;
+    @JsonIgnore
+    private String regDate = String.valueOf(LocalDateTime.now());
     private String image;
 
 

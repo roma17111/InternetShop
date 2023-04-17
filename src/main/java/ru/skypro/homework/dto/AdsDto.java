@@ -24,6 +24,4 @@ public class AdsDto {
     int price;
     String title;
 
-    @JsonIgnore
-    String description;
 }
