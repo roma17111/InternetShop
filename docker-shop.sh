@@ -8,7 +8,7 @@ if ! systemctl is-active --quiet docker; then
 fi
 
 # Check if the docker image already exists
-image_exists=$(docker images -q roman170692/shop)
+image_exists=$(docker pull ghcr.io/bizinmitya/front-react-avito:v1.10)
 
 if [ -z "$image_exists" ]; then
     # Pull the docker image
@@ -22,7 +22,7 @@ port_check=$(docker ps --format "{{.ID}} {{.Names}}" | grep -E ":[[:space:]]+sho
 if [ -z "$port_check" ]; then
     # Create and run the first container
     echo "Creating and running the container on port 3000:3000..."
-    docker run -d -p 3000:3000 --name shop roman170692/shop
+    docker run -d -p 3000:3000 --name bizinShop ghcr.io/bizinmitya/front-react-avito
 else
     # Check if the container is running on port 3000:3000
     port_check=$(docker port shop | grep 3000/tcp | grep 0.0.0.0:3000)
