@@ -19,4 +19,7 @@ public class ResponseWrapperComment {
     int count;
     List<CommentDto> results;
 
+    public void addComment(CommentDto comment) {
+        results.add(comment);
+    }
 }

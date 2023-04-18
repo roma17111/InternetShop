@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register","/ads","/pictures/**",
-            "/ads/**","/users/**","/users/me/**","/ads/**/comments"
+            "/ads/**","/users/**","/users/me/**"
     };
 
     @Bean

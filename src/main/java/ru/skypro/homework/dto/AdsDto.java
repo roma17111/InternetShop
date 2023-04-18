@@ -20,7 +20,7 @@ public class AdsDto {
     String image;
 
     // id объявления
-    long pk;
+    int pk;
     int price;
     String title;
 

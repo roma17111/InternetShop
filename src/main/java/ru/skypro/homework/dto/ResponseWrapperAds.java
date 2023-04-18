@@ -17,8 +17,7 @@ public class ResponseWrapperAds {
     int count;
     List<AdsDto> results;
 
-
-    public void addAdRoResults() {
-
+    public void addAdd(AdsDto add) {
+        results.add(add);
     }
 }
