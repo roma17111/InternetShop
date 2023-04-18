@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdsController {
 
-    // Потом уберём временные коллекции
+    //Потом уберём временные коллекции и лишние объекты - временная мера для заглушек
     List<CommentDto> c = new ArrayList<>();{
         c.add(new CommentDto(1, "/users/image/test",
                 "Roman", 1, "Отличный продавец!" +
@@ -64,10 +65,13 @@ public class AdsController {
         return ads;
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_RELATED_VALUE,
-    MediaType.ALL_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public AdsDto createAdd(@RequestParam(name = "image") MultipartFile image,
+
+    //Нифига пока не работает ни с фронтендом не со сваггером нормально
+    @PostMapping(consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE
+    })
+    public AdsDto createAdd(@RequestParam("image") MultipartFile image,
                             @RequestBody CreateAdsDto adsDto) {
         AdsDto adsDto1 = new AdsDto(1,
                 "/ads/image/test",
@@ -75,10 +79,9 @@ public class AdsController {
                 adsDto.getPrice(),
                 adsDto.getTitle());
         a.add(adsDto1);
+        System.out.println(adsDto1);
         return adsDto1;
     }
-
-
 
     @GetMapping(value = "/image/test")
     public ResponseEntity<byte[]> getImage() {
