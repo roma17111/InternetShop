@@ -23,7 +23,9 @@ public class AuthServiceImpl implements AuthService {
 
     private final static List<RegisterReq> users = new ArrayList<>();
 
-    private final static List<UserInfo> usersDto = new ArrayList<>();{
+    private final static List<UserInfo> usersDto = new ArrayList<>();
+
+    {
         usersDto.add(new UserInfo("user@gmail.com",
                 "Roman",
                 "Yakimenko", "123456"));
@@ -58,10 +60,9 @@ public class AuthServiceImpl implements AuthService {
         if (!manager.userExists(userName)) {
             return false;
         }
-
         UserDetails userDetails = manager.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
-        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
+        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(password.length());
         return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
     }
 

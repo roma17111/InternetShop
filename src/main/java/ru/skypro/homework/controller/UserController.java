@@ -2,42 +2,94 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.mdels.UserInfo;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UserInfoDto;
 import ru.skypro.homework.service.AuthService;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.UUID;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
 
+    private final UserDetailsManager manager;
     private final AuthService authService;
 
-    @PatchMapping("/users/me")
-    public UserInfo updateUser(@RequestBody UserInfo userInfo) {
+    UserInfoDto user = new UserInfoDto(
+            "user@gmail.com",
+            "Ivan",
+            "Ivanov",
+            "12345");
+
+    @PatchMapping("/me")
+    public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
         System.out.println("Hello");
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         System.out.println(authentication.isAuthenticated());
-        return new UserInfo(userInfo.getFirstName(),
-                userInfo.getLastName(),
-                userInfo.getPhone());
+        UserInfoDto userInfoDto1 = new UserInfoDto(userInfoDto.getFirstName(),
+                userInfoDto.getLastName(),
+                userInfoDto.getPhone());
+        userInfoDto.setImage("pictures/docker-sh.png");
+        return userInfoDto1;
+    }
+
+    @GetMapping("/me")
+    public UserInfoDto getUser() {
+        return user;
+    }
+
+    @PostMapping("/set_password")
+    public NewPassword setPassword(@RequestBody NewPassword password) {
+        return new NewPassword();
+    }
+
+    @PatchMapping(value = "/me/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+        user.setImage("/pictures/docker-sh.png");
+        System.out.println("Done");
+        return ResponseEntity.ok(user);
     }
 
 
-    @GetMapping("/users/me")
-    public UserInfo getUser() {
-    //    UserDto userDto = authService.getUser();
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        System.out.println(authentication.isAuthenticated());
-        return new UserInfo("Test", "test", "12345");
-    }
-
+/*    public String parseToBinaryString(String url) {
+        BufferedImage img1 = null;
+        try {
+            img1 = ImageIO.read(new File(url));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int width1 = img1.getWidth();
+        int height1 = img1.getHeight();
+        String con = "";
+        for (int i = 0; i < height1; i++) {
+            for (int j = 0; j < width1; j++) {
+                int rgb1 = img1.getRGB(j, i);
+                con += Integer.toBinaryString(rgb1);
+            }
+        }
+        System.out.println(con);
+        return con;
+    }*/
 }
 

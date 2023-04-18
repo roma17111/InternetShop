@@ -14,13 +14,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserInfoDto {
 
+    @JsonIgnore
     private long id;
+    @JsonIgnore
     private String email;
     private String firstName;
     private String lastName;
     private String phone;
     @JsonIgnore
     private String regDate = String.valueOf(LocalDateTime.now());
+    @JsonIgnore
     private String image;
 
 
@@ -36,4 +39,6 @@ public class UserInfoDto {
         this.lastName = lastName;
         this.phone = phone;
     }
+
+
 }
