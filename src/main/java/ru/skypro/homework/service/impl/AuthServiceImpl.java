@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mdels.UserInfo;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +36,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
 
+    private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager) {
+    public AuthServiceImpl(UserDetailsManager manager, UserRepository userRepository) {
         this.manager = manager;
+        this.userRepository = userRepository;
         this.encoder = new BCryptPasswordEncoder();
     }
 

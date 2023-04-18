@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -66,30 +67,28 @@ public class UserController {
 
     @PatchMapping(value = "/me/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-        user.setImage("/pictures/docker-sh.png");
+        user.setImage("/users/image/test");
         System.out.println("Done");
+        System.out.println(user);
         return ResponseEntity.ok(user);
     }
 
-
-/*    public String parseToBinaryString(String url) {
-        BufferedImage img1 = null;
+    @GetMapping(value = "/image/test")
+    public ResponseEntity<byte[]> getUserImage() {
+        File file = new File("pictures/image053-55.jpg");
+        byte[] img;
         try {
-            img1 = ImageIO.read(new File(url));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int width1 = img1.getWidth();
-        int height1 = img1.getHeight();
-        String con = "";
-        for (int i = 0; i < height1; i++) {
-            for (int j = 0; j < width1; j++) {
-                int rgb1 = img1.getRGB(j, i);
-                con += Integer.toBinaryString(rgb1);
+            FileInputStream inputStream = new FileInputStream(file);
+            try {
+                img = inputStream.readAllBytes();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println(con);
-        return con;
-    }*/
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img);
+    }
+
 }
 
