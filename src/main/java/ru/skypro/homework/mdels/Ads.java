@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class Ads {
     UserInfo author;
 
     @Column(name = "image_path")
-    String image;
+    byte[] image;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

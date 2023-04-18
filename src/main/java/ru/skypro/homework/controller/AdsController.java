@@ -30,7 +30,7 @@ public class AdsController {
     ResponseWrapperAds ads = new ResponseWrapperAds(1,
             List.of(new AdsDto(1, "/ads/image/test",
                     1, 20000,
-                    "Плэйстэйшн пять")));
+                    "Пятая плойка)))")));
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {

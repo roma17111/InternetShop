@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,7 +36,7 @@ public class UserInfo {
     private String regDate = String.valueOf(LocalDateTime.now());
 
     @Column(name = "image")
-    private String image;
+    private byte[] image;
 
 
     public UserInfo(String firstName, String lastName, String phone) {

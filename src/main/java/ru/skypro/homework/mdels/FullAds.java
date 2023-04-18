@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 
 
-//@Entity
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

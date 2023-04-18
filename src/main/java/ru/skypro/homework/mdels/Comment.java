@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@Entity
+@Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     // id author
