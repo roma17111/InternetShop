@@ -8,12 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.ResponseWrapperAds;
+import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,10 +24,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdsController {
 
-    ResponseWrapperAds ads = new ResponseWrapperAds(1,
+   private ResponseWrapperAds ads = new ResponseWrapperAds(1,
             List.of(new AdsDto(1, "/ads/image/test",
                     1, 20000,
                     "Пятая плойка)))")));
+
+    private ResponseWrapperComment comment = new ResponseWrapperComment(1,
+            List.of(new CommentDto(1,"/users/image/test",
+                    "Roman",1,"Отличный продавец!" +
+                    " Рекомендую!!!")));
+
+    FullAdsDto fullAds = new FullAdsDto(1,
+            "Roman",
+            "Tupego",
+            "Продаю пятую плойку, по причине отсутствия",
+            "user@gmail.com"
+    ,"/users/image/test","+78000000000",
+            20000,
+            "Пятая плойка");
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
@@ -58,6 +69,32 @@ public class AdsController {
             throw new RuntimeException(e);
         }
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseWrapperComment getComments(@PathVariable int id) {
+
+        return comment;
+    }
+
+    @GetMapping("/{id}")
+    public FullAdsDto getAds(@PathVariable int id) {
+        return fullAds;
+    }
+
+    @PatchMapping ("/{id}")
+    public FullAdsDto updateAds(@PathVariable int id,
+                             @RequestBody CreateAdsDto adsDto) {
+        fullAds.setPrice(adsDto.getPrice());
+        fullAds.setDescription(adsDto.getDescription());
+        fullAds.setDescription(adsDto.getDescription());
+        return fullAds;
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> removeAd(@PathVariable int id) {
+        ads = null;
+        return ResponseEntity.ok().build();
     }
 
 }

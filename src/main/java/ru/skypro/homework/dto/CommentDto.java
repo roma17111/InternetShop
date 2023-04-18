@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDto {
 
@@ -18,7 +22,15 @@ public class CommentDto {
     // url image
     String authorImage;
     String authorFirstName;
-    int date = new Date().getDate();
+    int createdAt = (int) System.currentTimeMillis();
     int pk;
     String text;
+
+    public CommentDto(int author, String authorImage, String authorFirstName, int pk, String text) {
+        this.author = author;
+        this.authorImage = authorImage;
+        this.authorFirstName = authorFirstName;
+        this.pk = pk;
+        this.text = text;
+    }
 }

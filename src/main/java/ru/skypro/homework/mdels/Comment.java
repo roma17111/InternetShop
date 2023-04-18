@@ -23,7 +23,7 @@ public class Comment {
     UserInfo author;
 
     // url image
-    String authorImage;
+    byte[] authorImage;
     String authorFirstName;
     int date = new Date().getDate();
     @Id
