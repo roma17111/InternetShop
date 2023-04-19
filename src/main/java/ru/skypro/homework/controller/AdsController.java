@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.mdels.Ads;
+import ru.skypro.homework.service.AdsService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +29,8 @@ import java.util.List;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 public class AdsController {
+
+    private final AdsService adsService;
 
     //Потом уберём временные коллекции и лишние объекты - временная мера для заглушек
     List<CommentDto> c = new ArrayList<>();
@@ -72,19 +76,14 @@ public class AdsController {
 
     //Теперь всё ок)))
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createAdd(@RequestPart(name = "image", value = "image")
+    public ResponseEntity<?> createAdd(@RequestPart(name = "image")
                                        MultipartFile image,
                                        @RequestPart(
-                                               name = "properties",
-                                               value = "properties")
+                                               name = "properties")
                                        CreateAdsDto properties) {
-        AdsDto adsDto1 = new AdsDto(1,
-                "/ads/image/test",
-                2,
-                properties.getPrice(),
-                properties.getTitle());
-        a.add(adsDto1);
-        System.out.println(adsDto1);
+        adsService.addAd(new Ads(properties.getPrice(),
+                properties.getTitle(),
+                properties.getDescription()));
         return ResponseEntity.ok().build();
     }
 

@@ -12,6 +12,8 @@ import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +31,17 @@ public class AdsServiceImpl implements AdsService {
         UserInfo userInfo = userRepository.findByEmail(email);
         userInfo.addAdFromUser(ads);
         userRepository.save(userInfo);
+    }
 
+    @Override
+    public List<Ads> getAdsFromAuthUser() {
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        return userInfo.getAds();
+    }
+
+    @Override
+    public List<Ads> getAllAds() {
+        return adsRepository.findAll();
     }
 }
