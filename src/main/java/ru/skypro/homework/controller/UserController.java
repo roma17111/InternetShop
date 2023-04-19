@@ -45,17 +45,17 @@ public class UserController {
 
     @PatchMapping("/me")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
-        System.out.println("Hello");
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        System.out.println(authentication.isAuthenticated());
-        UserInfoDto userInfoDto1 = new UserInfoDto(userInfoDto.getFirstName(),
-                userInfoDto.getLastName(),
-                userInfoDto.getPhone());
-        userInfoDto.setImage("pictures/docker-sh.png");
+        String userName = authService.getEmailFromAuthUser();
+        UserInfo userInfo = authService.getByUserName(userName);
+        userInfo.setFirstName(userInfoDto.getFirstName());
+        userInfo.setLastName(userInfoDto.getLastName());
+        userInfo.setPhone(userInfoDto.getPhone());
+        authService.saveUser(userInfo);
+        UserInfoDto userInfoDto1 = UserInfo.mapToUserInfoDto(userInfo);
         return userInfoDto1;
     }
 
+    // мапинг сущности в контроллере
     @GetMapping("/me")
     public UserInfoDto getUser() {
         String userName = authService.getEmailFromAuthUser();

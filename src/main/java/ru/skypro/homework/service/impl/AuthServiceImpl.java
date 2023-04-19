@@ -89,24 +89,12 @@ public class AuthServiceImpl implements AuthService {
                         .roles(registerReqDto.getRole().name())
                         .build()
         );
+        // маппинг сущности из дто в entity
         UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userRepository.save(userInfo);
         log.info("User added! " + userInfo);
         return true;
-    }
-
-    @Override
-    public UserInfo getUser() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        for (UserInfo dto : usersDto) {
-            if (principal.getUsername().equals(dto.getEmail())) {
-                return dto;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -121,4 +109,10 @@ public class AuthServiceImpl implements AuthService {
     public UserInfo getByUserName(String userName) {
         return userRepository.findByEmail(userName);
     }
+
+    @Override
+    public void saveUser(UserInfo user) {
+        userRepository.save(user);
+    }
+
 }

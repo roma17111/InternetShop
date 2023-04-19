@@ -14,9 +14,10 @@ public interface AuthService {
     boolean login(String userName, String password);
     boolean register(RegisterReqDto registerReqDto, Role role);
 
-    UserInfo getUser();
 
     String getEmailFromAuthUser();
 
     UserInfo getByUserName(String userName);
+
+    void saveUser(UserInfo user);
 }

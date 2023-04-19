@@ -13,10 +13,7 @@ import ru.skypro.homework.dto.UserInfoDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -58,6 +55,8 @@ public class UserInfo implements UserDetails {
 
     @OneToMany(mappedBy = "author")
     private List<Ads> ads;
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 
 
     public UserInfo(String firstName, String lastName, String phone) {
@@ -100,6 +99,10 @@ public class UserInfo implements UserDetails {
                 userInfo.firstName,
                 userInfo.lastName,
                 userInfo.getPhone());
+    }
+
+    public void addAdFromUser(Ads a) {
+        ads.add(a);
     }
 
     @Override

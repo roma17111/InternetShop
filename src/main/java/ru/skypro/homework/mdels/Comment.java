@@ -16,7 +16,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     // id author
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author", referencedColumnName = "user_id")
     UserInfo author;
 

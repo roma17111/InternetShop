@@ -13,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -26,7 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login", "/register","/ads","/pictures/**",
+            "/ads/**","/users/**","/users/me/**","/ads/*/comments"
+            // Временное решение для тестирования фронтенда. Уберу, когда добавлю addAdd
     };
 
     @Bean
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )
-                .cors().disable() //если ставить and, то вылазит лишняя формочка спринг auth
+                .cors().disable()
                 .httpBasic()
                 .and()
                 .sessionManagement()
