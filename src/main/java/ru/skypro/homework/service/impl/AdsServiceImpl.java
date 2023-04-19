@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.mdels.Ads;
+import ru.skypro.homework.mdels.Comment;
 import ru.skypro.homework.mdels.UserInfo;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
@@ -56,5 +57,16 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Ads findById(long id) {
         return adsRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void addCommentToAd(Comment comment,
+                               long id) {
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        comment.setAuthor(userInfo);
+        Ads ads = findById(id);
+        ads.addComment(comment);
+        adsRepository.save(ads);
     }
 }

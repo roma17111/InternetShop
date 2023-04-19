@@ -64,4 +64,8 @@ public class Ads {
                 ads.getPrice(),
                 ads.getTitle());
     }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }
