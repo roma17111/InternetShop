@@ -26,7 +26,7 @@ public class Ads {
     private List<Comment> comments;
 
     @Column(name = "image_path")
-    byte[] image;
+    byte[] adsImage;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

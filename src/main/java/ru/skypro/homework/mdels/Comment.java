@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -25,13 +23,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ads",referencedColumnName = "ads_id")
     private Ads ads;
-    // url image
-    byte[] authorImage;
-    String authorFirstName;
     int date = new Date().getDate();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int pk;
+    int id;
     String text;
 }
