@@ -53,9 +53,13 @@ public class UserInfo implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private List<Ads> ads;
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private List<Comment> comments;
 
 

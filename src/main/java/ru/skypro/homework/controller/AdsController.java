@@ -65,12 +65,22 @@ public class AdsController {
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
-        return ads;
+        List<Ads> adsList = adsService.getAdsFromAuthUser();
+        List<AdsDto> adsDtoList = new ArrayList<>();
+        for (int i = 0; i < adsList.size(); i++) {
+            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
+        }
+        return new ResponseWrapperAds(adsDtoList.size(), adsDtoList);
     }
 
     @GetMapping
     public ResponseWrapperAds getAllAds() {
-        return ads;
+        List<Ads> adsList = adsService.getAllAds();
+        List<AdsDto> adsDtoList = new ArrayList<>();
+        for (int i = 0; i < adsList.size(); i++) {
+            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
+        }
+        return new ResponseWrapperAds(adsDtoList.size(), adsDtoList);
     }
 
 
@@ -78,12 +88,13 @@ public class AdsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createAdd(@RequestPart(name = "image")
                                        MultipartFile image,
-                                       @RequestPart(
-                                               name = "properties")
+                                       @RequestPart(name = "properties")
                                        CreateAdsDto properties) {
-        adsService.addAd(new Ads(properties.getPrice(),
+        Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
-                properties.getDescription()));
+                properties.getDescription());
+        System.out.println(ads1);
+        adsService.addAd(ads1);
         return ResponseEntity.ok().build();
     }
 
@@ -128,10 +139,12 @@ public class AdsController {
     @PatchMapping("/{id}")
     public FullAdsDto updateAds(@PathVariable int id,
                                 @RequestBody CreateAdsDto adsDto) {
-        fullAds.setPrice(adsDto.getPrice());
-        fullAds.setDescription(adsDto.getDescription());
-        fullAds.setDescription(adsDto.getDescription());
-        return fullAds;
+        Ads ads1 = adsService.findById(id);
+        ads1.setDescription(ads1.getDescription());
+        ads1.setPrice(adsDto.getPrice());
+        ads1.setTitle(ads1.getTitle());
+        adsService.updateAd(ads1);
+        return Ads.mapToFullAdDto(ads1);
     }
 
     @DeleteMapping("{id}")
@@ -140,7 +153,7 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId,
                                            @PathVariable int commentId) {
         comment = null;

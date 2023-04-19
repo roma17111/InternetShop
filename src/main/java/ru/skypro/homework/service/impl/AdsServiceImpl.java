@@ -29,8 +29,15 @@ public class AdsServiceImpl implements AdsService {
     public void addAd(Ads ads) {
         String email = authService.getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
+        System.out.println(userInfo);
         userInfo.addAdFromUser(ads);
+        ads.setAuthor(userInfo);
         userRepository.save(userInfo);
+    }
+
+    @Override
+    public void updateAd(Ads ads) {
+        adsRepository.save(ads);
     }
 
     @Override
@@ -43,5 +50,10 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public List<Ads> getAllAds() {
         return adsRepository.findAll();
+    }
+
+    @Override
+    public Ads findById(long id) {
+        return adsRepository.findById(id).orElse(null);
     }
 }

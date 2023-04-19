@@ -19,8 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Ads {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "author", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserInfo author;
 
     @OneToMany(cascade = CascadeType.ALL,

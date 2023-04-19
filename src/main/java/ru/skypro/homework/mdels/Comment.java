@@ -17,13 +17,11 @@ import java.util.Date;
 public class Comment {
     // id author
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author", referencedColumnName = "user_id")
     UserInfo author;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ads",referencedColumnName = "ads_id")
     private Ads ads;
-    int date = new Date().getDate();
+    int date = (int) System.currentTimeMillis();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
