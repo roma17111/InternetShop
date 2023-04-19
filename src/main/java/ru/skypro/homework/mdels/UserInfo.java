@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,6 +38,9 @@ public class UserInfo {
 
     @Column(name = "image")
     private byte[] image;
+
+    @JsonIgnore
+    private Role role;
 
 
     public UserInfo(String firstName, String lastName, String phone) {

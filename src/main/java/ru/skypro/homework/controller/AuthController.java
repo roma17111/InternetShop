@@ -2,16 +2,14 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.LoginReq;
-import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.mappers.UserMapper;
 
 import static ru.skypro.homework.dto.Role.USER;
 
@@ -35,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterReq req) {
+    public ResponseEntity<?> register(@RequestBody RegisterReqDto req) {
         Role role = req.getRole() == null ? USER : req.getRole();
         if (authService.register(req, role)) {
             return ResponseEntity.ok().build();

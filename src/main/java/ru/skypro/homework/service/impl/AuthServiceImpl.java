@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mdels.UserInfo;
 import ru.skypro.homework.service.AuthService;
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final static List<RegisterReq> users = new ArrayList<>();
+    private final static List<RegisterReqDto> users = new ArrayList<>();
 
     private final static List<UserInfo> usersDto = new ArrayList<>();
 
@@ -44,17 +44,17 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
-    public static List<RegisterReq> getUsers() {
+    public static List<RegisterReqDto> getUsers() {
         return users;
     }
 
     @Override
-    public void addUser(RegisterReq user) {
+    public void addUser(RegisterReqDto user) {
         users.add(user);
     }
 
     @Override
-    public List<RegisterReq> getAllUsers() {
+    public List<RegisterReqDto> getAllUsers() {
         return Collections.unmodifiableList(users);
     }
 
@@ -70,23 +70,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterReq registerReq, Role role) {
-        if (manager.userExists(registerReq.getUsername())) {
+    public boolean register(RegisterReqDto registerReqDto, Role role) {
+        if (manager.userExists(registerReqDto.getUsername())) {
             return false;
         }
         manager.createUser(
                 User.withDefaultPasswordEncoder()
-                        .password(registerReq.getPassword())
-                        .username(registerReq.getUsername())
-                        .roles(registerReq.getRole().name())
+                        .password(registerReqDto.getPassword())
+                        .username(registerReqDto.getUsername())
+                        .roles(registerReqDto.getRole().name())
                         .build()
         );
-        UserInfo user = new UserInfo(registerReq.getUsername(),
-                registerReq.getFirstName(),
-                registerReq.getLastName(),
-                registerReq.getPhone());
-        System.out.println(registerReq);
-        addUser(registerReq);
+        UserInfo user = new UserInfo(registerReqDto.getUsername(),
+                registerReqDto.getFirstName(),
+                registerReqDto.getLastName(),
+                registerReqDto.getPhone());
+        System.out.println(registerReqDto);
+        addUser(registerReqDto);
         usersDto.add(user);
         return true;
     }
