@@ -18,8 +18,9 @@ public class RegisterReqDto {
 
     public static UserInfo mapToUserInfo(RegisterReqDto reqDto) {
         return new UserInfo(reqDto.getUsername(),
-                reqDto.firstName,
+                reqDto.getPassword(),
+                reqDto.getFirstName(),
                 reqDto.getLastName(),
-                reqDto.phone);
+                reqDto.getPhone());
     }
 }
