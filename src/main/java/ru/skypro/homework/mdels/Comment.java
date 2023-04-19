@@ -20,6 +20,7 @@ public class Comment {
     UserInfo author;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ads_id",referencedColumnName = "ads_id")
     private Ads ads;
     int date = (int) System.currentTimeMillis();
     @Id

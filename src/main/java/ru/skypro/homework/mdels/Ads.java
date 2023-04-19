@@ -33,7 +33,7 @@ public class Ads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ads_id")
-    int id;
+    long id;
     int price;
     String title;
     @JsonIgnore

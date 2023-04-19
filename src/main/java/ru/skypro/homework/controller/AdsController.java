@@ -133,8 +133,9 @@ public class AdsController {
     }
 
     @GetMapping("/{id}")
-    public FullAdsDto getAds(@PathVariable int id) {
-        return fullAds;
+    public FullAdsDto getAds(@PathVariable long id) {
+        Ads ads1 = adsService.findById(id);
+        return Ads.mapToFullAdDto(ads1);
     }
 
     @PatchMapping("/{id}")

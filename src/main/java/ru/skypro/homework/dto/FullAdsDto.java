@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class FullAdsDto {
 
     // id объявления
-    int pk;
+    long pk;
     String authorFirstName;
     String authorLastName;
     String description;
