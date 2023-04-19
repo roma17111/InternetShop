@@ -20,4 +20,6 @@ public interface AuthService {
     UserInfo getByUserName(String userName);
 
     void saveUser(UserInfo user);
+
+    void setPasswordFromUser(String newPassword);
 }

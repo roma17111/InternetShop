@@ -115,4 +115,11 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
+    @Override
+    public void setPasswordFromUser(String newPassword) {
+        String email = getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        userInfo.setPassword(encoder.encode(newPassword));
+        userRepository.save(userInfo);
+    }
 }

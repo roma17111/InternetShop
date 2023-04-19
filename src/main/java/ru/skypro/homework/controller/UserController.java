@@ -66,6 +66,7 @@ public class UserController {
 
     @PostMapping("/set_password")
     public NewPassword setPassword(@RequestBody NewPassword password) {
+        authService.setPasswordFromUser(password.getNewPassword());
         return new NewPassword();
     }
 
