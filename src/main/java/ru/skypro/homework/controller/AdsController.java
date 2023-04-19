@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mdels.Ads;
+import ru.skypro.homework.mdels.Comment;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.File;
@@ -50,18 +51,9 @@ public class AdsController {
 
     }
 
-    private ResponseWrapperAds ads = new ResponseWrapperAds(1, a);
+
 
     private ResponseWrapperComment comment = new ResponseWrapperComment(1, c);
-
-    FullAdsDto fullAds = new FullAdsDto(1,
-            "Roman",
-            "Tupego",
-            "Продаю пятую плойку, по причине отсутствия",
-            "user@gmail.com"
-            , "/users/image/test", "+78000000000",
-            20000,
-            "Пятая плойка");
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
@@ -118,18 +110,21 @@ public class AdsController {
 
     @GetMapping("/{id}/comments")
     public ResponseWrapperComment getComments(@PathVariable int id) {
-        return comment;
+        Ads ads = adsService.findById(id);
+        List<Comment> comments = ads.getComments();
+        List<CommentDto> commentDtoList = new ArrayList<>();
+        for (Comment comment1 : comments) {
+            commentDtoList.add(Comment.mapToCommentDto(comment1));
+        }
+        return new ResponseWrapperComment(commentDtoList.size(),commentDtoList);
     }
 
     @PostMapping("/{id}/comments")
     public CommentDto addComment(@PathVariable int id,
                                  @RequestBody CommentDto commentDto) {
-        CommentDto commentDto1 = new CommentDto(1,
-                "/users/image/test",
-                "Roman", 1, commentDto.getText()
-        );
-        c.add(commentDto1);
-        return commentDto1;
+        Comment comment1 = new Comment(commentDto.getText());
+       adsService.addCommentToAd(comment1,id);
+        return Comment.mapToCommentDto(comment1);
     }
 
     @GetMapping("/{id}")
@@ -151,14 +146,14 @@ public class AdsController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> removeAd(@PathVariable int id) {
-        ads = null;
+        Ads ads = adsService.findById(id);
+        adsService.deleteAdd(ads);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId,
                                            @PathVariable int commentId) {
-        comment = null;
         return ResponseEntity.ok().build();
     }
 }

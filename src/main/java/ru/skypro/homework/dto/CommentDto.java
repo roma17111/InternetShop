@@ -17,20 +17,21 @@ import java.util.Date;
 public class CommentDto {
 
     // id author
-    int author;
+    long author;
 
     // url image
     String authorImage;
     String authorFirstName;
     int createdAt = (int) System.currentTimeMillis();
-    int pk;
+    long pk;
     String text;
 
-    public CommentDto(int author, String authorImage, String authorFirstName, int pk, String text) {
+    public CommentDto(long author, String authorImage, String authorFirstName, long pk, String text) {
         this.author = author;
         this.authorImage = authorImage;
         this.authorFirstName = authorFirstName;
         this.pk = pk;
         this.text = text;
     }
+
 }

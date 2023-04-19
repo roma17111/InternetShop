@@ -12,7 +12,6 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
-
 import java.util.List;
 
 @Service
@@ -55,6 +54,19 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public void deleteAdd(Ads ads) {
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        userInfo.deleteAdFromUser(ads);
+        for (Comment comment : ads.getComments()) {
+            userInfo.deleteComment(comment);
+        }
+        userRepository.save(userInfo);
+        commentRepository.deleteAll(ads.getComments());
+        adsRepository.delete(ads);
+    }
+
+    @Override
     public Ads findById(long id) {
         return adsRepository.findById(id).orElse(null);
     }
@@ -64,8 +76,9 @@ public class AdsServiceImpl implements AdsService {
                                long id) {
         String email = authService.getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        comment.setAuthor(userInfo);
         Ads ads = findById(id);
+        comment.setAuthor(userInfo);
+        comment.setAds(ads);
         ads.addComment(comment);
         adsRepository.save(ads);
     }

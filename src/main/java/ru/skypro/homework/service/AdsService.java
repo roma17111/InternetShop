@@ -14,6 +14,8 @@ public interface AdsService {
 
     List<Ads> getAllAds();
 
+    void deleteAdd(Ads ads);
+
     Ads findById(long id);
 
     void addCommentToAd(Comment comment,

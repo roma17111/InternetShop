@@ -20,7 +20,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_test")
-@ToString(exclude = "ads")
+@ToString(exclude = {"comments","ads"})
 public class UserInfo implements UserDetails {
 
     @Id
@@ -107,6 +107,14 @@ public class UserInfo implements UserDetails {
 
     public void addAdFromUser(Ads a) {
         ads.add(a);
+    }
+
+    public void deleteAdFromUser(Ads a) {
+        ads.remove(a);
+    }
+
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
     }
 
     @Override
