@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,9 +16,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Ads {
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
-    UserInfo author;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "author", referencedColumnName = "user_id")
+    private UserInfo author;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+    mappedBy = "ads")
+    private List<Comment> comments;
 
     @Column(name = "image_path")
     byte[] image;
@@ -25,7 +31,7 @@ public class Ads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ads_id")
-    long pk;
+    long id;
     int price;
     String title;
 }

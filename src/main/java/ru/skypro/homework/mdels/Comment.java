@@ -22,6 +22,9 @@ public class Comment {
     @JoinColumn(name = "author", referencedColumnName = "user_id")
     UserInfo author;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ads",referencedColumnName = "ads_id")
+    private Ads ads;
     // url image
     byte[] authorImage;
     String authorFirstName;
