@@ -95,6 +95,7 @@ public class AdsController {
                 properties.getDescription());
         System.out.println(ads1);
         adsService.addAd(ads1);
+        log.info("added ads - " + ads1);
         return ResponseEntity.ok().build();
     }
 

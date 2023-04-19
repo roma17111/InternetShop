@@ -38,6 +38,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateAd(Ads ads) {
         adsRepository.save(ads);
+        log.info("updated ad " + ads);
     }
 
     @Override

@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
         UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userRepository.save(userInfo);
-        log.info("User added! " + userInfo);
+        log.info("User registered! " + userInfo);
         return true;
     }
 
