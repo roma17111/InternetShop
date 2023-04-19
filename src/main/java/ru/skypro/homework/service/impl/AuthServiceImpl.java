@@ -71,6 +71,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegisterReqDto registerReqDto, Role role) {
+        if (userRepository.findByEmail(registerReqDto.getUsername()) != null) {
+            return false;
+        }
         if (manager.userExists(registerReqDto.getUsername())) {
             return false;
         }
@@ -81,13 +84,9 @@ public class AuthServiceImpl implements AuthService {
                         .roles(registerReqDto.getRole().name())
                         .build()
         );
-        UserInfo user = new UserInfo(registerReqDto.getUsername(),
-                registerReqDto.getFirstName(),
-                registerReqDto.getLastName(),
-                registerReqDto.getPhone());
-        System.out.println(registerReqDto);
-        addUser(registerReqDto);
-        usersDto.add(user);
+        UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
+        userInfo.addRole(Role.USER);
+        userRepository.save(userInfo);
         return true;
     }
 

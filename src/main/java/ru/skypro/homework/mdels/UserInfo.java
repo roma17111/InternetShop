@@ -78,8 +78,8 @@ public class UserInfo implements UserDetails {
         this.phone = phone;
     }
 
-    public void addRole(RegisterReqDto reqDto) {
-        roles.add(reqDto.getRole());
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     @Override
