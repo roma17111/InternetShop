@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mdels.UserInfo;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -38,9 +41,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager, UserRepository userRepository) {
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public AuthServiceImpl(UserDetailsManager manager, UserRepository userRepository, CustomUserDetailsService customUserDetailsService) {
         this.manager = manager;
         this.userRepository = userRepository;
+        this.customUserDetailsService = customUserDetailsService;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -85,8 +91,10 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
         UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
+        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userInfo.addRole(Role.USER);
         userRepository.save(userInfo);
+        log.info("User added! " + userInfo);
         return true;
     }
 
