@@ -26,8 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register","/ads","/pictures/**",
-            "/ads/**","/users/**","/users/me/**","/ads/*/comments"
+            "/login", "/register"
     };
 
     @Bean
@@ -60,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )
-                .cors().disable()
+                .cors().disable() //если ставить and, то вылазит лишняя формочка спринг auth
                 .httpBasic()
                 .and()
                 .sessionManagement()
