@@ -66,21 +66,19 @@ public class AdsController {
     }
 
 
-    //Нифига пока не работает ни с фронтендом не со сваггером нормально
-    @PostMapping(consumes = {
-            MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_VALUE
-    })
-    public AdsDto createAdd(@RequestParam("image") MultipartFile image,
-                            @RequestBody CreateAdsDto adsDto) {
+    //Теперь всё ок)))
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createAdd(@RequestPart(name = "image",value = "image") MultipartFile image,
+                                       @RequestPart(name = "properties",
+                                       value = "properties") CreateAdsDto properties) {
         AdsDto adsDto1 = new AdsDto(1,
                 "/ads/image/test",
-                1,
-                adsDto.getPrice(),
-                adsDto.getTitle());
+                2,
+                properties.getPrice(),
+                properties.getTitle());
         a.add(adsDto1);
         System.out.println(adsDto1);
-        return adsDto1;
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/image/test")
