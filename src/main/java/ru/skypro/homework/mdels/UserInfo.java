@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserInfoDto;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -86,7 +88,12 @@ public class UserInfo implements UserDetails {
         this.role = role;
     }
 
-    public void addRole(Role role) {
+    public static UserInfoDto mapToUserInfoDto(UserInfo userInfo) {
+        return new UserInfoDto(userInfo.getId(),
+                userInfo.getEmail(),
+                userInfo.firstName,
+                userInfo.lastName,
+                userInfo.getPhone());
     }
 
     @Override

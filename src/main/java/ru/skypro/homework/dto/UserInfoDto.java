@@ -40,6 +40,11 @@ public class UserInfoDto {
     }
 
 
-
-
+    public UserInfoDto(long id, String email, String firstName, String lastName, String phone) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
 }

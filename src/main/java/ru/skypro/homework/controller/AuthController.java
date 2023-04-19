@@ -21,7 +21,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
         if (authService.login(req.getUsername(), req.getPassword())) {

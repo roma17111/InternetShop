@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserInfoDto;
+import ru.skypro.homework.mdels.UserInfo;
 import ru.skypro.homework.service.AuthService;
 
 import javax.imageio.ImageIO;
@@ -57,7 +58,10 @@ public class UserController {
 
     @GetMapping("/me")
     public UserInfoDto getUser() {
-        return user;
+        String userName = authService.getEmailFromAuthUser();
+        UserInfo userInfo = authService.getByUserName(userName);
+        UserInfoDto userInfoDto = UserInfo.mapToUserInfoDto(userInfo);
+        return userInfoDto;
     }
 
     @PostMapping("/set_password")
@@ -65,7 +69,7 @@ public class UserController {
         return new NewPassword();
     }
 
-    @PatchMapping(value = "/me/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
         user.setImage("/users/image/test");
         System.out.println("Done");

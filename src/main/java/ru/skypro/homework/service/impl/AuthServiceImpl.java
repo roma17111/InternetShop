@@ -108,4 +108,17 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
+
+    @Override
+    public String getEmailFromAuthUser() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        return principal.getUsername();
+    }
+
+    @Override
+    public UserInfo getByUserName(String userName) {
+        return userRepository.findByEmail(userName);
+    }
 }

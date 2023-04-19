@@ -29,22 +29,26 @@ import java.util.List;
 public class AdsController {
 
     //Потом уберём временные коллекции и лишние объекты - временная мера для заглушек
-    List<CommentDto> c = new ArrayList<>();{
+    List<CommentDto> c = new ArrayList<>();
+
+    {
         c.add(new CommentDto(1, "/users/image/test",
                 "Roman", 1, "Отличный продавец!" +
                 " Рекомендую!!!"));
     }
 
-    List<AdsDto> a = new ArrayList<>();{
+    List<AdsDto> a = new ArrayList<>();
+
+    {
         a.add(new AdsDto(1, "/ads/image/test",
                 1, 20000,
                 "Пятая плойка)))"));
 
     }
 
-    private ResponseWrapperAds ads = new ResponseWrapperAds(1,a);
+    private ResponseWrapperAds ads = new ResponseWrapperAds(1, a);
 
-    private ResponseWrapperComment comment = new ResponseWrapperComment(1,c);
+    private ResponseWrapperComment comment = new ResponseWrapperComment(1, c);
 
     FullAdsDto fullAds = new FullAdsDto(1,
             "Roman",
@@ -68,9 +72,12 @@ public class AdsController {
 
     //Теперь всё ок)))
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createAdd(@RequestPart(name = "image",value = "image") MultipartFile image,
-                                       @RequestPart(name = "properties",
-                                       value = "properties") CreateAdsDto properties) {
+    public ResponseEntity<?> createAdd(@RequestPart(name = "image", value = "image")
+                                       MultipartFile image,
+                                       @RequestPart(
+                                               name = "properties",
+                                               value = "properties")
+                                       CreateAdsDto properties) {
         AdsDto adsDto1 = new AdsDto(1,
                 "/ads/image/test",
                 2,
@@ -102,9 +109,10 @@ public class AdsController {
     public ResponseWrapperComment getComments(@PathVariable int id) {
         return comment;
     }
+
     @PostMapping("/{id}/comments")
     public CommentDto addComment(@PathVariable int id,
-                                              @RequestBody CommentDto commentDto) {
+                                 @RequestBody CommentDto commentDto) {
         CommentDto commentDto1 = new CommentDto(1,
                 "/users/image/test",
                 "Roman", 1, commentDto.getText()
