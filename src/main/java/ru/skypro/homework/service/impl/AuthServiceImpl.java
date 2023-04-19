@@ -66,13 +66,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (userRepository.findByEmail(userName)==null) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
-        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(password.length());
-        return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
+        return encoder.matches(password, encryptedPassword);
     }
 
     @Override
@@ -92,7 +91,6 @@ public class AuthServiceImpl implements AuthService {
         );
         UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
-        userInfo.addRole(Role.USER);
         userRepository.save(userInfo);
         log.info("User added! " + userInfo);
         return true;

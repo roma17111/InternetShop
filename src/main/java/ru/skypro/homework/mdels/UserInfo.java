@@ -18,6 +18,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user_test")
 public class UserInfo implements UserDetails {
 
     @Id
@@ -46,11 +47,9 @@ public class UserInfo implements UserDetails {
     @Column(name = "image")
     private byte[] image;
 
-    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
-    @CollectionTable(name = "role",joinColumns = @JoinColumn(name = "user_id",
-            referencedColumnName = "user_id"))
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
 
 
     public UserInfo(String firstName, String lastName, String phone) {
@@ -78,12 +77,22 @@ public class UserInfo implements UserDetails {
         this.phone = phone;
     }
 
+    public UserInfo(String email, String password, String firstName, String lastName, String phone, Role role) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+    }
+
     public void addRole(Role role) {
-        roles.add(role);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(this.role);
         return roles;
     }
 

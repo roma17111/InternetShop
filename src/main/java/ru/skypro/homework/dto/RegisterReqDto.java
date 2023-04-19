@@ -21,6 +21,7 @@ public class RegisterReqDto {
                 reqDto.getPassword(),
                 reqDto.getFirstName(),
                 reqDto.getLastName(),
-                reqDto.getPhone());
+                reqDto.getPhone(),
+                reqDto.getRole());
     }
 }
