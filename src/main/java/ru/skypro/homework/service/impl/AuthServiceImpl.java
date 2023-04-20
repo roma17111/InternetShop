@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.mdels.UserInfo;
+import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.repository.UserRepository;
 

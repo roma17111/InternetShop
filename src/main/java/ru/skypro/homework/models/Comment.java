@@ -1,11 +1,10 @@
-package ru.skypro.homework.mdels;
+package ru.skypro.homework.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor

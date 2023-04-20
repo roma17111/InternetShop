@@ -2,7 +2,7 @@ package ru.skypro.homework.service.mappers;
 
 import org.mapstruct.Mapper;
 import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.mdels.Ads;
+import ru.skypro.homework.models.Ads;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {

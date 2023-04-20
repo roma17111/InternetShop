@@ -1,7 +1,7 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.mdels.Ads;
-import ru.skypro.homework.mdels.Comment;
+import ru.skypro.homework.models.Ads;
+import ru.skypro.homework.models.Comment;
 
 import java.util.List;
 

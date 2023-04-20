@@ -1,4 +1,4 @@
-package ru.skypro.homework.mdels;
+package ru.skypro.homework.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

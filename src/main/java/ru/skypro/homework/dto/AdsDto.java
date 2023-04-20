@@ -1,12 +1,10 @@
 package ru.skypro.homework.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.skypro.homework.mdels.Ads;
 
 import javax.persistence.Table;
 

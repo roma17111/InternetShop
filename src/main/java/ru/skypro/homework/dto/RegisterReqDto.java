@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.mdels.UserInfo;
+import ru.skypro.homework.models.UserInfo;
 
 @Data
 @AllArgsConstructor
