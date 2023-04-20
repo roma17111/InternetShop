@@ -29,4 +29,8 @@ public interface AdsService {
     void updateComment(long adId,
                        long commentId,
                        CommentDto commentDto);
+
+    List<Comment> getAllComments();
+
+    List<Ads> getAllads();
 }

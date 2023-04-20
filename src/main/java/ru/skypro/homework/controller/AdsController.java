@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.AuthService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +27,7 @@ import java.util.List;
 public class AdsController {
 
     private final AdsService adsService;
+    private final AuthService authService;
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {

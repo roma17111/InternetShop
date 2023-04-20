@@ -126,4 +126,15 @@ public class AuthServiceImpl implements AuthService {
         userInfo.setPassword(encoder.encode(newPassword));
         userRepository.save(userInfo);
     }
+
+    @Override
+    public boolean userIsAdmin() {
+        String email = getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        if (userInfo.getRole().equals(Role.ADMIN)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

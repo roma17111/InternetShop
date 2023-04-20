@@ -120,8 +120,15 @@ public class AdsServiceImpl implements AdsService {
         commentRepository.save(comment);
         updateAd(ads);
 
+    }
 
+    @Override
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
 
-
+    @Override
+    public List<Ads> getAllads() {
+        return adsRepository.findAll();
     }
 }

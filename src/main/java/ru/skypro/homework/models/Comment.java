@@ -5,6 +5,9 @@ import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
+import java.security.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +33,7 @@ public class Comment {
     })
     @JoinColumn(name = "ads_id", referencedColumnName = "ads_id")
     Ads ads;
-    int date = (int) System.currentTimeMillis();
+    long date = (new Date().getTime()/1000);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -43,8 +46,9 @@ public class Comment {
 
     public static CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(comment.getAuthor().getId(),
-                "/ads/comments/"+String.valueOf(comment.getId() ),
+                "/ads/comments/" + String.valueOf(comment.getId()),
                 comment.getAuthor().getFirstName(),
+                comment.getDate(),
                 comment.getId(),
                 comment.getText());
     }

@@ -24,4 +24,6 @@ public interface AuthService {
     void saveUser(UserInfo user);
 
     void setPasswordFromUser(String newPassword);
+
+    boolean userIsAdmin();
 }

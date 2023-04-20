@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import ru.skypro.homework.dto.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -30,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register",
-            // это ссылки на фото
+            // это ссылки на фото объявлений. Они видны любым пользователям
             "/ads/image/**",
             "/ads/image/test/**",
             "/ads/**","/avatars1/**","/avatars2/**"
@@ -64,8 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**",
-                                        "/ads/*/comments").authenticated()
+                                .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/**").hasRole("/ADMIN")
 
                 )
                 .cors().and()

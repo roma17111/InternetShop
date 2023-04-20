@@ -17,7 +17,7 @@ public class CommentDto {
     // url image
     String authorImage;
     String authorFirstName;
-    int createdAt;
+    long createdAt;
     long pk;
     String text;
 
