@@ -132,12 +132,12 @@ public class AdsController {
         }
         adsService.updateAd(ads);
         return ResponseEntity.ok().build();
-
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId,
                                            @PathVariable int commentId) {
+        adsService.deleteComment(adId,commentId);
         return ResponseEntity.ok().build();
     }
 }

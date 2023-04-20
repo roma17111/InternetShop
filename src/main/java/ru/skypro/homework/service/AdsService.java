@@ -22,4 +22,6 @@ public interface AdsService {
 
     void addCommentToAd(Comment comment,
                         long id);
+
+    void deleteComment(long adId, long commentId);
 }

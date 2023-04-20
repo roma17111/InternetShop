@@ -87,4 +87,17 @@ public class AdsServiceImpl implements AdsService {
         ads.addComment(comment);
         adsRepository.save(ads);
     }
+
+    @Override
+    public void deleteComment(long adId, long commentId) {
+        Ads ads = findById(adId);
+        UserInfo userInfo = ads.getAuthor();
+        Comment comment = commentRepository.findById(commentId).
+                orElseThrow(NullPointerException::new);
+        ads.deleteComment(comment);
+        userInfo.deleteComment(comment);
+        userRepository.save(userInfo);
+        adsRepository.save(ads);
+        commentRepository.delete(comment);
+    }
 }
