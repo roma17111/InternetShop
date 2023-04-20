@@ -1,10 +1,8 @@
 package ru.skypro.homework.service.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.UserInfoDto;
-import ru.skypro.homework.mdels.UserInfo;
+import ru.skypro.homework.models.UserInfo;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper{

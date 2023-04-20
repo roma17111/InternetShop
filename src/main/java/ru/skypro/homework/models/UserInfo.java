@@ -1,4 +1,4 @@
-package ru.skypro.homework.mdels;
+package ru.skypro.homework.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserInfoDto;
 
@@ -52,6 +51,10 @@ public class UserInfo implements UserDetails {
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
 
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL,

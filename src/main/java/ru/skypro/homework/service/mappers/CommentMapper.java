@@ -1,9 +1,8 @@
 package ru.skypro.homework.service.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.mdels.Comment;
+import ru.skypro.homework.models.Comment;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {

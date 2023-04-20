@@ -2,7 +2,7 @@ package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.mdels.UserInfo;
+import ru.skypro.homework.models.UserInfo;
 
 import java.util.List;
 
