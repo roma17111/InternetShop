@@ -72,27 +72,35 @@ public class UserController {
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-        user.setImage("/users/image/test");
-        System.out.println("Done");
-        System.out.println(user);
-        return ResponseEntity.ok(user);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = authService.getByUserName(email);
+        userInfo.setImage(image.getBytes());
+        authService.saveUser(userInfo);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/image/test")
     public ResponseEntity<byte[]> getUserImage() {
-        File file = new File("pictures/image053-55.jpg");
-        byte[] img;
-        try {
-            FileInputStream inputStream = new FileInputStream(file);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = authService.getByUserName(email);
+        if (userInfo.getImage() == null) {
+            File file = new File("pictures/image053-55.jpg");
+            byte[] img;
             try {
-                img = inputStream.readAllBytes();
-            } catch (IOException e) {
+                FileInputStream inputStream = new FileInputStream(file);
+                try {
+                    img = inputStream.readAllBytes();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img);
         }
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img);
+
+        byte[] userImg = userInfo.getImage();
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userImg);
     }
 
 }

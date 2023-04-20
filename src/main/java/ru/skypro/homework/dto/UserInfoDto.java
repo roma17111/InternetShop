@@ -23,7 +23,7 @@ public class UserInfoDto {
     private String phone;
     @JsonIgnore
     private String regDate = String.valueOf(LocalDateTime.now());
-    private String image;
+    private String image = "/users/image/test";
 
 
     public UserInfoDto(String firstName, String lastName, String phone) {

@@ -14,7 +14,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "Comment_table")
 public class Comment {
-    // id author
+
     @ManyToOne(fetch = FetchType.EAGER,cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
