@@ -91,6 +91,15 @@ public class UserInfo implements UserDetails {
         this.phone = phone;
     }
 
+    public UserInfo(long id, String email, String firstName, String lastName, String phone, Role role) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+    }
+
     public UserInfo(String email, String password, String firstName, String lastName, String phone, Role role) {
         this.email = email;
         this.password = password;

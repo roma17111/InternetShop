@@ -33,11 +33,6 @@ public class UserController {
     private final UserDetailsManager manager;
     private final AuthService authService;
 
-    UserInfoDto user = new UserInfoDto(
-            "user@gmail.com",
-            "Ivan",
-            "Ivanov",
-            "12345");
 
     @PatchMapping("/me")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {

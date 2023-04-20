@@ -9,8 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
+import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.repository.UserRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +30,7 @@ public class AdsController {
 
     private final AdsService adsService;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
@@ -81,6 +84,13 @@ public class AdsController {
         for (Comment comment1 : comments) {
             commentDtoList.add(Comment.mapToCommentDto(comment1));
         }
+        if (authService.userIsAdmin()) {
+            String email = authService.getEmailFromAuthUser();
+            UserInfo userInfo = userRepository.findByEmail(email);
+            for (CommentDto dto : commentDtoList) {
+                dto.setAuthor(userInfo.getId());
+            }
+        }
         return new ResponseWrapperComment(commentDtoList.size(), commentDtoList);
     }
 
@@ -102,6 +112,13 @@ public class AdsController {
     @GetMapping("/{id}")
     public FullAdsDto getAds(@PathVariable long id) {
         Ads ads1 = adsService.findById(id);
+        if (authService.userIsAdmin()) {
+            String email = authService.getEmailFromAuthUser();
+            UserInfo userInfo = userRepository.findByEmail(email);
+            FullAdsDto fullAdsDto = Ads.mapToFullAdDto(ads1);
+            fullAdsDto.setEmail(userInfo.getEmail());
+            return fullAdsDto;
+        }
         return Ads.mapToFullAdDto(ads1);
     }
 
@@ -123,7 +140,7 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value = "/{id}/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAd(@PathVariable long id,
                                       @RequestPart MultipartFile image) {
         Ads ads = adsService.findById(id);
@@ -139,15 +156,15 @@ public class AdsController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId,
                                            @PathVariable int commentId) {
-        adsService.deleteComment(adId,commentId);
+        adsService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public CommentDto updateComment(@PathVariable int adId,
-                                           @PathVariable int commentId,
-                                           @RequestBody CommentDto commentDto) {
-        adsService.updateComment(adId,commentId,commentDto);
+                                    @PathVariable int commentId,
+                                    @RequestBody CommentDto commentDto) {
+        adsService.updateComment(adId, commentId, commentDto);
         return commentDto;
     }
 }
