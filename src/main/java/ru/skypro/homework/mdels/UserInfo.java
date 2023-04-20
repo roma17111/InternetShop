@@ -55,11 +55,11 @@ public class UserInfo implements UserDetails {
 
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private List<Ads> ads;
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private List<Comment> comments;
 
 
