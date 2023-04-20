@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
+import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
 import ru.skypro.homework.models.UserInfo;
@@ -12,6 +13,7 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
+
 import java.util.List;
 
 @Service
@@ -85,6 +87,7 @@ public class AdsServiceImpl implements AdsService {
         comment.setAuthor(userInfo);
         comment.setAds(ads);
         ads.addComment(comment);
+        commentRepository.save(comment);
         adsRepository.save(ads);
     }
 
@@ -99,5 +102,26 @@ public class AdsServiceImpl implements AdsService {
         userRepository.save(userInfo);
         adsRepository.save(ads);
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public void updateComment(long adId,
+                              long commentId,
+                              CommentDto commentDto) {
+        Ads ads = findById(adId);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(NullPointerException::new);
+        for (Comment adsComment : ads.getComments()) {
+            if (adsComment.equals(comment)) {
+                adsComment.setText(commentDto.getText());
+            }
+        }
+        comment.setText(commentDto.getText());
+        commentRepository.save(comment);
+        updateAd(ads);
+
+
+
+
     }
 }

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
 
@@ -24,4 +25,8 @@ public interface AdsService {
                         long id);
 
     void deleteComment(long adId, long commentId);
+
+    void updateComment(long adId,
+                       long commentId,
+                       CommentDto commentDto);
 }

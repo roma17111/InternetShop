@@ -140,4 +140,12 @@ public class AdsController {
         adsService.deleteComment(adId,commentId);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{adId}/comments/{commentId}")
+    public CommentDto updateComment(@PathVariable int adId,
+                                           @PathVariable int commentId,
+                                           @RequestBody CommentDto commentDto) {
+        adsService.updateComment(adId,commentId,commentDto);
+        return commentDto;
+    }
 }
