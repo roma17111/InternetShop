@@ -1,12 +1,9 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -67,6 +64,10 @@ public class AuthServiceImpl implements AuthService {
         return Collections.unmodifiableList(users);
     }
 
+    @Override
+    public UserInfo getById(long id) {
+        return userRepository.findById(id).orElse(null);
+    }
     @Override
     public boolean login(String userName, String password) {
         if (userRepository.findByEmail(userName)==null) {

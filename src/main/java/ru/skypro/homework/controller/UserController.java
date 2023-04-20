@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,28 +80,19 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/image/test")
-    public ResponseEntity<byte[]> getUserImage() {
-        String email = authService.getEmailFromAuthUser();
-        UserInfo userInfo = authService.getByUserName(email);
-        if (userInfo.getImage() == null) {
-            File file = new File("pictures/image053-55.jpg");
-            byte[] img;
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                try {
-                    img = inputStream.readAllBytes();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(img);
-        }
-
+    @GetMapping(value = "/{id}/image")
+    public ResponseEntity<byte[]> getUserImage(@PathVariable long id) {
+        UserInfo userInfo = authService.getById(id);
+        System.out.println(userInfo);
         byte[] userImg = userInfo.getImage();
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userImg);
+    }
+
+    @GetMapping("/image")
+    public ResponseEntity<byte[]> getImageFromAuthUser() {
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = authService.getByUserName(email);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userInfo.getImage());
     }
 
 }

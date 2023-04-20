@@ -18,15 +18,18 @@ public class CommentDto {
 
     // id author
     long author;
-
     // url image
-    String authorImage;
+    String authorImage = "/users/"+String.valueOf(this.author)+"/image  ";
     String authorFirstName;
     int createdAt = (int) System.currentTimeMillis();
     long pk;
     String text;
 
-    public CommentDto(long author, String authorImage, String authorFirstName, long pk, String text) {
+    public CommentDto(long author,
+                      String authorImage,
+                      String authorFirstName,
+                      long pk,
+                      String text) {
         this.author = author;
         this.authorImage = authorImage;
         this.authorFirstName = authorFirstName;

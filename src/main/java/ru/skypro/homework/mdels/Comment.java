@@ -15,7 +15,7 @@ import java.util.Date;
 @Table(name = "Comment_table")
 public class Comment {
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = {
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
@@ -23,14 +23,14 @@ public class Comment {
     })
     UserInfo author;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = {
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
     @JoinColumn(name = "ads_id", referencedColumnName = "ads_id")
-    private Ads ads;
+    Ads ads;
     int date = (int) System.currentTimeMillis();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +44,7 @@ public class Comment {
 
     public static CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(comment.getAuthor().getId(),
-                "/users/image/test",
+                "/users/" + String.valueOf(comment.getAuthor().getId()) + "/image",
                 comment.getAuthor().getFirstName(),
                 comment.getId(),
                 comment.getText());

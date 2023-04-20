@@ -11,6 +11,8 @@ public interface AuthService {
 
     List<RegisterReqDto> getAllUsers();
 
+    UserInfo getById(long id);
+
     boolean login(String userName, String password);
     boolean register(RegisterReqDto registerReqDto, Role role);
 

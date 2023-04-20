@@ -18,18 +18,18 @@ import java.util.List;
 @Table(name = "ads_table")
 public class Ads {
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
     })
-    private UserInfo author;
+    UserInfo author;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "ads")
-    private List<Comment> comments;
+    List<Comment> comments;
 
     @Column(name = "image_path")
     byte[] adsImage;

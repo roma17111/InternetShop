@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/login", "/register",
             // это ссылки на фото
-            "/users/image/test",
+            "/users/image",
             "/ads/image/test",
             "/ads/image/test/**",
             "/ads/{id}/image"

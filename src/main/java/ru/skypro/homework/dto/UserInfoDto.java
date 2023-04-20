@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,17 +11,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserInfoDto {
 
-    @JsonIgnore
     private long id;
-    @JsonIgnore
     private String email;
     private String firstName;
     private String lastName;
     private String phone;
+
     @JsonIgnore
     private String regDate = String.valueOf(LocalDateTime.now());
-    private String image = "/users/image/test";
-
+    private String image = "/users/image";
 
     public UserInfoDto(String firstName, String lastName, String phone) {
         this.firstName = firstName;
@@ -39,7 +34,6 @@ public class UserInfoDto {
         this.phone = phone;
     }
 
-
     public UserInfoDto(long id, String email, String firstName, String lastName, String phone) {
         this.id = id;
         this.email = email;
@@ -47,4 +41,5 @@ public class UserInfoDto {
         this.lastName = lastName;
         this.phone = phone;
     }
+
 }
