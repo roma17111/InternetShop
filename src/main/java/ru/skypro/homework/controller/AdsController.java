@@ -33,8 +33,6 @@ public class AdsController {
 
     private final AdsService adsService;
 
-
-
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
         List<Ads> adsList = adsService.getAdsFromAuthUser();
@@ -96,6 +94,13 @@ public class AdsController {
         Comment comment1 = new Comment(commentDto.getText());
         adsService.addCommentToAd(comment1, id);
         return Comment.mapToCommentDto(comment1);
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<byte[]> getImageComments(@PathVariable long id) {
+        Comment comment = adsService.getCommentById(id);
+        byte[] image = comment.getAuthor().getImage();
+        return ResponseEntity.ok().body(image);
     }
 
     @GetMapping("/{id}")

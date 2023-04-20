@@ -44,7 +44,7 @@ public class Comment {
 
     public static CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(comment.getAuthor().getId(),
-                "/users/" + String.valueOf(comment.getAuthor().getId()) + "/image",
+                "/ads/comments/"+String.valueOf(comment.getId() ),
                 comment.getAuthor().getFirstName(),
                 comment.getId(),
                 comment.getText());

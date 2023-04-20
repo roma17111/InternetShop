@@ -36,6 +36,11 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public Comment getCommentById(long id) {
+        return commentRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public void updateAd(Ads ads) {
         adsRepository.save(ads);
         log.info("updated ad " + ads);

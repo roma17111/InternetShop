@@ -8,6 +8,8 @@ import java.util.List;
 public interface AdsService {
     void addAd(Ads ads);
 
+    Comment getCommentById(long id);
+
     void updateAd(Ads ads);
 
     List<Ads> getAdsFromAuthUser();
