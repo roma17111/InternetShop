@@ -5,8 +5,9 @@ import lombok.experimental.FieldDefaults;
 import ru.skypro.homework.mdels.Ads;
 
 @Data
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = false)
 public class CreateAdsDto {
     String description;
     int price;

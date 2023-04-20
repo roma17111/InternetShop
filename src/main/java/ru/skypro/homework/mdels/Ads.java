@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"comments"})
+@Table(name = "ads_table")
 public class Ads {
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = {

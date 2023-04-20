@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "Comment_test")
+@Table(name = "Comment_table")
 public class Comment {
     // id author
     @ManyToOne(fetch = FetchType.EAGER,cascade = {

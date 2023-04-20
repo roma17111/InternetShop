@@ -2,6 +2,7 @@ package ru.skypro.homework.configurations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,9 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register","/ads","/pictures/**",
-            "/ads/**","/users/**","/users/me/**","/ads/*/comments"
-            // Временное решение для тестирования фронтенда. Уберу, когда добавлю addAdd
+            "/login", "/register",
+            // это ссылки на фото
+            "/users/image/test",
+            "/ads/image/test"
     };
 
     @Bean
@@ -38,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
+
 
 
     @Override
@@ -56,19 +63,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/ads/**", "/users/**",
+                                        "/ads/*/comments").authenticated()
 
                 )
-                .cors().disable()
-                .httpBasic()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .cors().and()
+                .httpBasic(withDefaults()).userDetailsService(userDetailsService);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
+
 }
 
