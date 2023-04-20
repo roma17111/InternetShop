@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "ads_table")
 public class Ads {
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = {
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
@@ -55,7 +55,7 @@ public class Ads {
                 ads.getAuthor().getLastName(),
                 ads.getDescription(),
                 ads.getAuthor().getEmail(),
-                "/ads/image/test",
+                "/ads/" + String.valueOf(ads.getId()) + "/image",
                 ads.getAuthor().getPhone(),
                 ads.getPrice(),
                 ads.getTitle());
@@ -63,7 +63,7 @@ public class Ads {
 
     public static AdsDto mapToAdsDto(Ads ads) {
         return new AdsDto(ads.getAuthor().getId(),
-                "/ads/image/test",
+                "/ads/" + String.valueOf(ads.getId()) + "/image",
                 ads.getId(),
                 ads.getPrice(),
                 ads.getTitle());

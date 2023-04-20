@@ -21,7 +21,7 @@ public class AdsDto {
     long author;
 
     // ссылка на картинку объявления
-    String image;
+    String image = "/ads/"+String.valueOf(this.pk)+"/image";
 
     // id объявления
     long pk;

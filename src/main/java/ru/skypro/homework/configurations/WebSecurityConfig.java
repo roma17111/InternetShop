@@ -32,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/login", "/register",
             // это ссылки на фото
             "/users/image/test",
-            "/ads/image/test"
+            "/ads/image/test",
+            "/ads/image/test/**",
+            "/ads/{id}/image"
     };
 
     @Bean

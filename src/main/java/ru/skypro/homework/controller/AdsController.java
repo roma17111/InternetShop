@@ -33,27 +33,7 @@ public class AdsController {
 
     private final AdsService adsService;
 
-    //Потом уберём временные коллекции и лишние объекты - временная мера для заглушек
-    List<CommentDto> c = new ArrayList<>();
 
-    {
-        c.add(new CommentDto(1, "/users/image/test",
-                "Roman", 1, "Отличный продавец!" +
-                " Рекомендую!!!"));
-    }
-
-    List<AdsDto> a = new ArrayList<>();
-
-    {
-        a.add(new AdsDto(1, "/ads/image/test",
-                1, 20000,
-                "Пятая плойка)))"));
-
-    }
-
-
-
-    private ResponseWrapperComment comment = new ResponseWrapperComment(1, c);
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
@@ -75,8 +55,6 @@ public class AdsController {
         return new ResponseWrapperAds(adsDtoList.size(), adsDtoList);
     }
 
-
-    //Теперь всё ок)))
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createAdd(@RequestPart(name = "image")
                                        MultipartFile image,
@@ -85,27 +63,20 @@ public class AdsController {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
-        System.out.println(ads1);
+        try {
+            ads1.setAdsImage(image.getBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
         adsService.addAd(ads1);
         log.info("added ads - " + ads1);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/image/test")
-    public ResponseEntity<byte[]> getImage() {
-        File file = new File("pictures/47411489_1555472527.344_4yzusU_n.jpg");
-        byte[] image;
-        try {
-            FileInputStream inputStream = new FileInputStream(file);
-            try {
-                image = inputStream.readAllBytes();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+    @GetMapping(value = "/{id}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable long id) {
+        Ads ads = adsService.findById(id);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(ads.getAdsImage());
     }
 
     @GetMapping("/{id}/comments")
@@ -116,14 +87,14 @@ public class AdsController {
         for (Comment comment1 : comments) {
             commentDtoList.add(Comment.mapToCommentDto(comment1));
         }
-        return new ResponseWrapperComment(commentDtoList.size(),commentDtoList);
+        return new ResponseWrapperComment(commentDtoList.size(), commentDtoList);
     }
 
     @PostMapping("/{id}/comments")
     public CommentDto addComment(@PathVariable int id,
                                  @RequestBody CommentDto commentDto) {
         Comment comment1 = new Comment(commentDto.getText());
-       adsService.addCommentToAd(comment1,id);
+        adsService.addCommentToAd(comment1, id);
         return Comment.mapToCommentDto(comment1);
     }
 
