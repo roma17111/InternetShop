@@ -121,6 +121,20 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping(value = "/{id}/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAd(@PathVariable long id,
+                                      @RequestPart MultipartFile image) {
+        Ads ads = adsService.findById(id);
+        try {
+            ads.setAdsImage(image.getBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        adsService.updateAd(ads);
+        return ResponseEntity.ok().build();
+
+    }
+
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable int adId,
                                            @PathVariable int commentId) {
