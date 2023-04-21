@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Slf4j
+@Log4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -87,17 +89,6 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(registerReqDto.getUsername()) != null) {
             return false;
         }
-        if (manager.userExists(registerReqDto.getUsername())) {
-            return false;
-        }
-        manager.createUser(
-                User.withDefaultPasswordEncoder()
-                        .password(registerReqDto.getPassword())
-                        .username(registerReqDto.getUsername())
-                        .roles(registerReqDto.getRole().name())
-                        .build()
-        );
-        // маппинг сущности из дто в entity
         UserInfo userInfo = RegisterReqDto.mapToUserInfo(registerReqDto);
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         userRepository.save(userInfo);
@@ -110,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         UserDetails principal = (UserDetails) authentication.getPrincipal();
+        log.info("Получен email - " + principal.getUsername());
         return principal.getUsername();
     }
 
@@ -149,6 +141,7 @@ public class AuthServiceImpl implements AuthService {
         userInfo.setFirstName(userInfoDto.getFirstName());
         userInfo.setLastName(userInfoDto.getLastName());
         userInfo.setPhone(userInfoDto.getPhone());
+        log.info("User updated!!! " + userInfo.getEmail());
         saveUser(userInfo);
         return UserInfo.mapToUserInfoDto(userInfo);
     }

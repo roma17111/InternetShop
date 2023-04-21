@@ -1,7 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
@@ -24,13 +27,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final CustomUserDetailsService userDetailsService;
     private final AuthService authService;
 
     @Override
@@ -39,6 +41,7 @@ public class AdsServiceImpl implements AdsService {
         UserInfo userInfo = userRepository.findByEmail(email);
         userInfo.addAdFromUser(ads);
         ads.setAuthor(userInfo);
+        log.info("added add " + ads);
         userRepository.save(userInfo);
     }
 
@@ -75,6 +78,7 @@ public class AdsServiceImpl implements AdsService {
         }
         userRepository.save(userInfo);
         commentRepository.deleteAll(ads.getComments());
+        log.warn("ads deleted!!! " + ads);
         adsRepository.delete(ads);
     }
 
@@ -92,6 +96,7 @@ public class AdsServiceImpl implements AdsService {
         comment.setAuthor(userInfo);
         comment.setAds(ads);
         ads.addComment(comment);
+        log.info("added comment " + comment.getText()+"to ads "+ ads.getDescription());
         commentRepository.save(comment);
         adsRepository.save(ads);
     }
@@ -104,6 +109,7 @@ public class AdsServiceImpl implements AdsService {
                 orElseThrow(NullPointerException::new);
         ads.deleteComment(comment);
         userInfo.deleteComment(comment);
+        log.warn("comment deleted!" + comment.getText());
         userRepository.save(userInfo);
         adsRepository.save(ads);
         commentRepository.delete(comment);
@@ -122,6 +128,7 @@ public class AdsServiceImpl implements AdsService {
             }
         }
         comment.setText(commentDto.getText());
+        log.info("comment updated!" + comment.getText());
         commentRepository.save(comment);
         updateAd(ads);
         return Comment.mapToCommentDto(comment);

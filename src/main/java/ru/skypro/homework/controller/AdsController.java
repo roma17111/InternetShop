@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -29,8 +30,6 @@ import java.util.List;
 public class AdsController {
 
     private final AdsService adsService;
-    private final AuthService authService;
-    private final UserRepository userRepository;
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
