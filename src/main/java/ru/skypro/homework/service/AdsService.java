@@ -1,6 +1,10 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
 
@@ -26,11 +30,24 @@ public interface AdsService {
 
     void deleteComment(long adId, long commentId);
 
-    void updateComment(long adId,
-                       long commentId,
-                       CommentDto commentDto);
+    CommentDto updateComment(long adId,
+                             long commentId,
+                             CommentDto commentDto);
 
     List<Comment> getAllComments();
 
     List<Ads> getAllads();
+
+    List<CommentDto> mapListToCommentDto(List<Comment> comments);
+
+    List<CommentDto> getCommentDtoList(long id);
+
+    List<AdsDto> getAdsDtoListFromAuthUser();
+
+    List<AdsDto> getAdsFromAllUsers();
+
+    void uploadFileAndAd(MultipartFile image,
+                         CreateAdsDto properties);
+
+    FullAdsDto getFullAd(long id);
 }

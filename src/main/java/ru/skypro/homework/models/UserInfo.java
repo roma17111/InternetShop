@@ -29,7 +29,7 @@ public class UserInfo implements UserDetails {
 
     @Column(name = "email")
     private String email;
-    @JsonIgnore
+
     private String password;
 
     @Column(name = "first_name")
@@ -41,14 +41,14 @@ public class UserInfo implements UserDetails {
     @Column(name = "phone")
     private String phone;
 
-    @JsonIgnore
+
     @Column(name = "reg_date")
     private String regDate = String.valueOf(LocalDateTime.now());
 
     @Column(name = "image")
     private byte[] image;
 
-    @JsonIgnore
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

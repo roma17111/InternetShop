@@ -40,7 +40,6 @@ public class Ads {
     long id;
     int price;
     String title;
-    @JsonIgnore
     String description;
 
     public Ads(int price, String title, String description) {

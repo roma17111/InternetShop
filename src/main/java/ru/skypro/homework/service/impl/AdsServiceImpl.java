@@ -3,8 +3,12 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
+import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateAdsDto;
+import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
 import ru.skypro.homework.models.UserInfo;
@@ -14,6 +18,8 @@ import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -105,9 +111,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void updateComment(long adId,
-                              long commentId,
-                              CommentDto commentDto) {
+    public CommentDto updateComment(long adId,
+                                    long commentId,
+                                    CommentDto commentDto) {
         Ads ads = findById(adId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NullPointerException::new);
@@ -119,7 +125,7 @@ public class AdsServiceImpl implements AdsService {
         comment.setText(commentDto.getText());
         commentRepository.save(comment);
         updateAd(ads);
-
+        return Comment.mapToCommentDto(comment);
     }
 
     @Override
@@ -130,5 +136,80 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public List<Ads> getAllads() {
         return adsRepository.findAll();
+    }
+
+    @Override
+    public List<CommentDto> mapListToCommentDto(List<Comment> comments) {
+        List<CommentDto> commentDtoList = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentDtoList.add(Comment.mapToCommentDto(comment));
+        }
+        return commentDtoList;
+    }
+
+    @Override
+    public List<CommentDto> getCommentDtoList(long id) {
+        Ads ads = findById(id);
+        List<Comment> comments = ads.getComments();
+        List<CommentDto> commentDtoList = new ArrayList<>();
+        for (Comment comment1 : comments) {
+            commentDtoList.add(Comment.mapToCommentDto(comment1));
+        }
+        if (authService.userIsAdmin()) {
+            String email = authService.getEmailFromAuthUser();
+            UserInfo userInfo = userRepository.findByEmail(email);
+            for (CommentDto dto : commentDtoList) {
+                dto.setAuthor(userInfo.getId());
+            }
+        }
+        return commentDtoList;
+    }
+
+    @Override
+    public List<AdsDto> getAdsDtoListFromAuthUser() {
+        List<Ads> adsList = getAdsFromAuthUser();
+        List<AdsDto> adsDtoList = new ArrayList<>();
+        for (int i = 0; i < adsList.size(); i++) {
+            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
+        }
+        return adsDtoList;
+    }
+
+    @Override
+    public List<AdsDto> getAdsFromAllUsers() {
+        List<Ads> adsList = getAllAds();
+        List<AdsDto> adsDtoList = new ArrayList<>();
+        for (int i = 0; i < adsList.size(); i++) {
+            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
+        }
+        return adsDtoList;
+    }
+
+    @Override
+    public void uploadFileAndAd(MultipartFile image,
+                                CreateAdsDto properties) {
+        Ads ads1 = new Ads(properties.getPrice(),
+                properties.getTitle(),
+                properties.getDescription());
+        try {
+            ads1.setAdsImage(image.getBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        addAd(ads1);
+        log.info("added ads - " + ads1);
+    }
+
+    @Override
+    public FullAdsDto getFullAd(long id) {
+        Ads ads1 = findById(id);
+        if (authService.userIsAdmin()) {
+            String email = authService.getEmailFromAuthUser();
+            UserInfo userInfo = userRepository.findByEmail(email);
+            FullAdsDto fullAdsDto = Ads.mapToFullAdDto(ads1);
+            fullAdsDto.setEmail(userInfo.getEmail());
+            return fullAdsDto;
+        }
+        return Ads.mapToFullAdDto(ads1);
     }
 }

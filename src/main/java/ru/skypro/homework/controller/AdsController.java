@@ -34,21 +34,13 @@ public class AdsController {
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
-        List<Ads> adsList = adsService.getAdsFromAuthUser();
-        List<AdsDto> adsDtoList = new ArrayList<>();
-        for (int i = 0; i < adsList.size(); i++) {
-            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
-        }
+        List<AdsDto> adsDtoList = adsService.getAdsDtoListFromAuthUser();
         return new ResponseWrapperAds(adsDtoList.size(), adsDtoList);
     }
 
     @GetMapping
     public ResponseWrapperAds getAllAds() {
-        List<Ads> adsList = adsService.getAllAds();
-        List<AdsDto> adsDtoList = new ArrayList<>();
-        for (int i = 0; i < adsList.size(); i++) {
-            adsDtoList.add(Ads.mapToAdsDto(adsList.get(i)));
-        }
+        List<AdsDto> adsDtoList = adsService.getAdsFromAllUsers();
         return new ResponseWrapperAds(adsDtoList.size(), adsDtoList);
     }
 
@@ -57,16 +49,7 @@ public class AdsController {
                                        MultipartFile image,
                                        @RequestPart(name = "properties")
                                        CreateAdsDto properties) {
-        Ads ads1 = new Ads(properties.getPrice(),
-                properties.getTitle(),
-                properties.getDescription());
-        try {
-            ads1.setAdsImage(image.getBytes());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        adsService.addAd(ads1);
-        log.info("added ads - " + ads1);
+        adsService.uploadFileAndAd(image,properties);
         return ResponseEntity.ok().build();
     }
 
@@ -78,20 +61,9 @@ public class AdsController {
 
     @GetMapping("/{id}/comments")
     public ResponseWrapperComment getComments(@PathVariable int id) {
-        Ads ads = adsService.findById(id);
-        List<Comment> comments = ads.getComments();
-        List<CommentDto> commentDtoList = new ArrayList<>();
-        for (Comment comment1 : comments) {
-            commentDtoList.add(Comment.mapToCommentDto(comment1));
-        }
-        if (authService.userIsAdmin()) {
-            String email = authService.getEmailFromAuthUser();
-            UserInfo userInfo = userRepository.findByEmail(email);
-            for (CommentDto dto : commentDtoList) {
-                dto.setAuthor(userInfo.getId());
-            }
-        }
-        return new ResponseWrapperComment(commentDtoList.size(), commentDtoList);
+        List<CommentDto> commentDtoList = adsService.getCommentDtoList(id);
+        return new ResponseWrapperComment(commentDtoList.size(),
+                commentDtoList);
     }
 
     @PostMapping("/{id}/comments")
@@ -111,15 +83,7 @@ public class AdsController {
 
     @GetMapping("/{id}")
     public FullAdsDto getAds(@PathVariable long id) {
-        Ads ads1 = adsService.findById(id);
-        if (authService.userIsAdmin()) {
-            String email = authService.getEmailFromAuthUser();
-            UserInfo userInfo = userRepository.findByEmail(email);
-            FullAdsDto fullAdsDto = Ads.mapToFullAdDto(ads1);
-            fullAdsDto.setEmail(userInfo.getEmail());
-            return fullAdsDto;
-        }
-        return Ads.mapToFullAdDto(ads1);
+        return adsService.getFullAd(id);
     }
 
     @PatchMapping("/{id}")
@@ -154,17 +118,17 @@ public class AdsController {
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable int adId,
-                                           @PathVariable int commentId) {
+    public ResponseWrapperComment deleteComment(@PathVariable int adId,
+                                                @PathVariable int commentId) {
         adsService.deleteComment(adId, commentId);
-        return ResponseEntity.ok().build();
+        List<Comment> comments = adsService.findById(adId).getComments();
+        return new ResponseWrapperComment(comments.size(), adsService.mapListToCommentDto(comments));
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public CommentDto updateComment(@PathVariable int adId,
                                     @PathVariable int commentId,
                                     @RequestBody CommentDto commentDto) {
-        adsService.updateComment(adId, commentId, commentDto);
-        return commentDto;
+        return adsService.updateComment(adId, commentId, commentDto);
     }
 }
