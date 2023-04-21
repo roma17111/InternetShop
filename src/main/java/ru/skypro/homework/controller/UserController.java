@@ -36,23 +36,14 @@ public class UserController {
 
     @PatchMapping("/me")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
-        String userName = authService.getEmailFromAuthUser();
-        UserInfo userInfo = authService.getByUserName(userName);
-        userInfo.setFirstName(userInfoDto.getFirstName());
-        userInfo.setLastName(userInfoDto.getLastName());
-        userInfo.setPhone(userInfoDto.getPhone());
-        authService.saveUser(userInfo);
-        UserInfoDto userInfoDto1 = UserInfo.mapToUserInfoDto(userInfo);
-        return userInfoDto1;
+        return authService.updateAuthUser(userInfoDto);
     }
 
-    // мапинг сущности в контроллере
     @GetMapping("/me")
     public UserInfoDto getUser() {
         String userName = authService.getEmailFromAuthUser();
         UserInfo userInfo = authService.getByUserName(userName);
-        UserInfoDto userInfoDto = UserInfo.mapToUserInfoDto(userInfo);
-        return userInfoDto;
+        return UserInfo.mapToUserInfoDto(userInfo);
     }
 
     @PostMapping("/set_password")
@@ -63,10 +54,7 @@ public class UserController {
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
-        String email = authService.getEmailFromAuthUser();
-        UserInfo userInfo = authService.getByUserName(email);
-        userInfo.setImage(image.getBytes());
-        authService.saveUser(userInfo);
+        authService.updateUserImage(image);
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,9 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserInfoDto;
 import ru.skypro.homework.models.UserInfo;
 
 import java.util.List;
@@ -26,4 +28,8 @@ public interface AuthService {
     void setPasswordFromUser(String newPassword);
 
     boolean userIsAdmin();
+
+    UserInfoDto updateAuthUser(UserInfoDto userInfoDto);
+
+    void updateUserImage(MultipartFile image);
 }

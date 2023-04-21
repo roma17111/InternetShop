@@ -10,13 +10,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserInfoDto;
 import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,9 +71,10 @@ public class AuthServiceImpl implements AuthService {
     public UserInfo getById(long id) {
         return userRepository.findById(id).orElse(null);
     }
+
     @Override
     public boolean login(String userName, String password) {
-        if (userRepository.findByEmail(userName)==null) {
+        if (userRepository.findByEmail(userName) == null) {
             return false;
         }
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
@@ -136,5 +140,28 @@ public class AuthServiceImpl implements AuthService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public UserInfoDto updateAuthUser(UserInfoDto userInfoDto) {
+        String userName = getEmailFromAuthUser();
+        UserInfo userInfo = getByUserName(userName);
+        userInfo.setFirstName(userInfoDto.getFirstName());
+        userInfo.setLastName(userInfoDto.getLastName());
+        userInfo.setPhone(userInfoDto.getPhone());
+        saveUser(userInfo);
+        return UserInfo.mapToUserInfoDto(userInfo);
+    }
+
+    @Override
+    public void updateUserImage(MultipartFile image) {
+        String email = getEmailFromAuthUser();
+        UserInfo userInfo = getByUserName(email);
+        try {
+            userInfo.setImage(image.getBytes());
+        } catch (IOException e) {
+            log.error("invalid file - " + e.getMessage());
+        }
+        saveUser(userInfo);
     }
 }

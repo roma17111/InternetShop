@@ -37,7 +37,6 @@ public class AdsServiceImpl implements AdsService {
     public void addAd(Ads ads) {
         String email = authService.getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        System.out.println(userInfo);
         userInfo.addAdFromUser(ads);
         ads.setAuthor(userInfo);
         userRepository.save(userInfo);
@@ -128,13 +127,11 @@ public class AdsServiceImpl implements AdsService {
         return Comment.mapToCommentDto(comment);
     }
 
-    @Override
-    public List<Comment> getAllComments() {
+    private List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
 
-    @Override
-    public List<Ads> getAllads() {
+    private List<Ads> getAllads() {
         return adsRepository.findAll();
     }
 

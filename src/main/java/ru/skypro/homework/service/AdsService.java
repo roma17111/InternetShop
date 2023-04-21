@@ -34,9 +34,6 @@ public interface AdsService {
                              long commentId,
                              CommentDto commentDto);
 
-    List<Comment> getAllComments();
-
-    List<Ads> getAllads();
 
     List<CommentDto> mapListToCommentDto(List<Comment> comments);
 
