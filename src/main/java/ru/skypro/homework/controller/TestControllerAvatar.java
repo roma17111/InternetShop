@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin(value = "http://java-mouse.ru")
+@CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
