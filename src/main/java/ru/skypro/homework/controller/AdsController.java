@@ -13,6 +13,7 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AvatarService;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @CrossOrigin(value = "http://localhost:3000")
@@ -25,14 +26,14 @@ public class AdsController {
     private final AvatarService avatarService;
 
     @GetMapping("/comments/avatars2/{id}")
-    public ResponseEntity<byte[]> getAvatarImageComments(@PathVariable long id) {
+    public ResponseEntity<byte[]> getAvatarImageComments(@PathVariable long id) throws ExecutionException, InterruptedException {
         long a = adsService.getCommentById(id).getAuthor().getAvatar().getId();
         byte[] imageBytes = avatarService.getAvatarImage(a);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
     @GetMapping("/avatars2/{id}")
-    public ResponseEntity<byte[]> getAvatarImageAds(@PathVariable long id) {
+    public ResponseEntity<byte[]> getAvatarImageAds(@PathVariable long id) throws ExecutionException, InterruptedException {
         long a = adsService.findById(id).getAvatar().getId();
         byte[] imageBytes = avatarService.getAvatarImage(a);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);

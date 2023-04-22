@@ -16,6 +16,7 @@ import ru.skypro.homework.service.impl.AvatarServiceImpl;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
@@ -33,13 +34,13 @@ public class TestControllerAvatar {
 
     @GetMapping("/avatars2/{id}{dataId}")
     public ResponseEntity<byte[]> getAvatarImage(@PathVariable long id,
-                                                 @PathVariable long dataId) {
+                                                 @PathVariable long dataId) throws ExecutionException, InterruptedException {
         byte[] imageBytes = avatarService.getAvatarImage(id);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
     @GetMapping("/avatars1/{id}")
-    public ResponseEntity<Resource> getAvatar(@PathVariable Integer id) throws JSchException, SftpException, IOException {
+    public ResponseEntity<Resource> getAvatar(@PathVariable Integer id) throws JSchException, SftpException, IOException, ExecutionException, InterruptedException {
         Resource resource = avatarService.getAvatarResource(id);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
@@ -47,7 +48,7 @@ public class TestControllerAvatar {
     }
 
     @GetMapping("/avatars/{id}/download")
-    public ResponseEntity<Resource> downloadAvatar(@PathVariable Integer id) throws JSchException, SftpException, IOException {
+    public ResponseEntity<Resource> downloadAvatar(@PathVariable Integer id) throws JSchException, SftpException, IOException, ExecutionException, InterruptedException {
         Resource resource = avatarService.getAvatarResource(id);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.jcraft.jsch.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -15,22 +17,20 @@ import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AvatarRepository;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 
 @Service
 @Log4j
 @RequiredArgsConstructor
 public class AvatarServiceImpl implements AvatarService {
 
-
-   private final AvatarRepository avatarRepository;
-
-    private final Map<Long, byte[]> avatarCache = new ConcurrentHashMap<>();
+    private final AvatarRepository avatarRepository;
+    private final Cache<Long, byte[]> avatarCache = Caffeine.newBuilder().build();
+    private final ConcurrentMap<Long, CompletableFuture<byte[]>> loadingAvatar = new ConcurrentHashMap<>();
+    private final Executor asyncExecutor = Executors.newCachedThreadPool();
 
     @Value("${sftp.host}")
     private String SFTP_HOST;
@@ -53,26 +53,14 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public void testSave(MultipartFile file,
-                         MediaType mediaType) {
+    public void testSave(MultipartFile file, MediaType mediaType) {
         try {
-            JSch jsch = new JSch();
-            Session session = jsch.getSession(SFTP_USER, SFTP_HOST, SFTP_PORT);
-            session.setPassword(SFTP_PASSWORD);
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();
-
-            ChannelSftp channelSftp = (ChannelSftp) session.openChannel("sftp");
-            channelSftp.connect();
-
+            ChannelSftp channelSftp = setupJsch();
             InputStream inputStream = file.getInputStream();
             String filePath = SFTP_DIRECTORY + file.getOriginalFilename();
             channelSftp.put(inputStream, filePath);
+            channelSftp.exit();
 
-            channelSftp.disconnect();
-            session.disconnect();
-
-         //   avatar.setId(new Random().nextInt(Integer.MAX_VALUE));
             Avatar avatar = new Avatar();
             avatar.setFileSize((int) file.getSize());
             avatar.setImageType(mediaType.toString());
@@ -85,8 +73,22 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public byte[] getAvatarImage(long avatarId) {
-        return avatarCache.computeIfAbsent(avatarId, this::getByteAvatarImageUncached);
+    public byte[] getAvatarImage(long avatarId) throws ExecutionException, InterruptedException {
+        CompletableFuture<byte[]> future = loadingAvatar.get(avatarId);
+        if (future != null) {
+            return future.get();
+        }
+        return avatarCache.get(avatarId, id -> {
+            CompletableFuture<byte[]> newFuture = new CompletableFuture<>();
+            loadingAvatar.put(id, newFuture);
+            asyncExecutor.execute(() -> {
+                byte[] result = getByteAvatarImageUncached(id);
+                avatarCache.put(id, result);
+                newFuture.complete(result);
+                loadingAvatar.remove(id);
+            });
+            return null;
+        });
     }
 
     private byte[] getByteAvatarImageUncached(Long avatarId) {
@@ -107,8 +109,7 @@ public class AvatarServiceImpl implements AvatarService {
         }
     }
 
-    @Override
-    public Resource getAvatarResource(long avatarId) throws JSchException, SftpException, IOException{
+    public Resource getAvatarResource(long avatarId) throws ExecutionException, InterruptedException {
         byte[] data = getAvatarImage(avatarId);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
         return new InputStreamResource(byteArrayInputStream);

@@ -9,6 +9,7 @@ import ru.skypro.homework.models.Avatar;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface AvatarService {
     List<Avatar> getAllAvatars();
@@ -16,7 +17,7 @@ public interface AvatarService {
     void testSave(MultipartFile file,
                   MediaType mediaType);
 
-    byte[] getAvatarImage(long avatarId);
+    byte[] getAvatarImage(long avatarId) throws ExecutionException, InterruptedException;
 
-    Resource getAvatarResource(long avatarId) throws JSchException, SftpException, IOException;
+    Resource getAvatarResource(long avatarId) throws JSchException, SftpException, IOException, ExecutionException, InterruptedException;
 }

@@ -21,6 +21,7 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 
 import java.io.*;
+import java.util.concurrent.ExecutionException;
 
 
 @Slf4j
@@ -58,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/avatars2/{id}")
-    public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) {
+    public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) throws ExecutionException, InterruptedException {
         long a = authService.getById(id).getAvatar().getId();
         byte[] imageBytes = avatarService.getAvatarImage(a);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
