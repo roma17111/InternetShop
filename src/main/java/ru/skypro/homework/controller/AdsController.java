@@ -89,9 +89,9 @@ public class AdsController {
     public FullAdsDto updateAds(@PathVariable int id,
                                 @RequestBody CreateAdsDto adsDto) {
         Ads ads1 = adsService.findById(id);
-        ads1.setDescription(ads1.getDescription());
+        ads1.setDescription(adsDto.getDescription());
         ads1.setPrice(adsDto.getPrice());
-        ads1.setTitle(ads1.getTitle());
+        ads1.setTitle(adsDto.getTitle());
         adsService.updateAd(ads1);
         return Ads.mapToFullAdDto(ads1);
     }
@@ -106,13 +106,7 @@ public class AdsController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAd(@PathVariable long id,
                                       @RequestPart MultipartFile image) {
-        Ads ads = adsService.findById(id);
-        try {
-            ads.setAdsImage(image.getBytes());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        adsService.updateAd(ads);
+       adsService.updateAdImageFromAuthUser(id,image);
         return ResponseEntity.ok().build();
     }
 

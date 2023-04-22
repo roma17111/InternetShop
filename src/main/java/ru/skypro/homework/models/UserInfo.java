@@ -19,7 +19,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_test")
-@ToString(exclude = {"comments","ads"})
+@ToString(exclude = {"comments","ads","image"})
 public class UserInfo implements UserDetails {
 
     @Id

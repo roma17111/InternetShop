@@ -14,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"comments"})
+@ToString(exclude = {"comments","adsImage"})
 @Table(name = "ads_table")
 public class Ads {
 

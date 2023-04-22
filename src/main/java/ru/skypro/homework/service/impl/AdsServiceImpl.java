@@ -3,11 +3,8 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.log4j.Log4j;
-import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateAdsDto;
@@ -41,7 +38,7 @@ public class AdsServiceImpl implements AdsService {
         UserInfo userInfo = userRepository.findByEmail(email);
         userInfo.addAdFromUser(ads);
         ads.setAuthor(userInfo);
-        log.info("added add " + ads);
+        log.info("added add " + ads.getDescription());
         userRepository.save(userInfo);
     }
 
@@ -63,8 +60,7 @@ public class AdsServiceImpl implements AdsService {
         return userInfo.getAds();
     }
 
-    @Override
-    public List<Ads> getAllAds() {
+    private List<Ads> getAllAds() {
         return adsRepository.findAll();
     }
 
@@ -132,14 +128,6 @@ public class AdsServiceImpl implements AdsService {
         commentRepository.save(comment);
         updateAd(ads);
         return Comment.mapToCommentDto(comment);
-    }
-
-    private List<Comment> getAllComments() {
-        return commentRepository.findAll();
-    }
-
-    private List<Ads> getAllads() {
-        return adsRepository.findAll();
     }
 
     @Override
@@ -215,5 +203,17 @@ public class AdsServiceImpl implements AdsService {
             return fullAdsDto;
         }
         return Ads.mapToFullAdDto(ads1);
+    }
+
+    @Override
+    public void updateAdImageFromAuthUser(long id,
+                                          MultipartFile image) {
+        Ads ads = findById(id);
+        try {
+            ads.setAdsImage(image.getBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        updateAd(ads);
     }
 }

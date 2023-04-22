@@ -18,10 +18,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
+@CrossOrigin(value = "http://java-mouse.ru")
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
-    @Autowired
+
     AvatarServiceImpl avatarService;
 
     @PostMapping(value = "/testSave", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

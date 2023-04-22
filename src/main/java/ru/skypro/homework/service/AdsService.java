@@ -19,8 +19,6 @@ public interface AdsService {
 
     List<Ads> getAdsFromAuthUser();
 
-    List<Ads> getAllAds();
-
     void deleteAdd(Ads ads);
 
     Ads findById(long id);
@@ -47,4 +45,7 @@ public interface AdsService {
                          CreateAdsDto properties);
 
     FullAdsDto getFullAd(long id);
+
+    void updateAdImageFromAuthUser(long id,
+                                   MultipartFile image);
 }

@@ -29,10 +29,7 @@ import java.io.*;
 @RequiredArgsConstructor
 public class UserController {
 
-
-    private final UserDetailsManager manager;
     private final AuthService authService;
-
 
     @PatchMapping("/me")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
