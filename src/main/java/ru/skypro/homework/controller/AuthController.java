@@ -15,7 +15,8 @@ import ru.skypro.homework.service.AuthService;
 import static ru.skypro.homework.dto.Role.USER;
 
 @Log4j2
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = {"http://localhost:3000",
+        "http://java-mouse.ru"})
 @RestController
 @RequiredArgsConstructor
 public class AuthController {

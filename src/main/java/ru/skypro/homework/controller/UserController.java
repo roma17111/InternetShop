@@ -25,7 +25,9 @@ import java.util.concurrent.ExecutionException;
 
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+//Есть свой работающий сайт. Добавил домен, чтобы туда сюда хосты не менять. Работает номрально
+@CrossOrigin(value = {"http://localhost:3000",
+        "http://java-mouse.ru"})
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor

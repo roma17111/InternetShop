@@ -19,7 +19,8 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 @RestController
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = {"http://localhost:3000",
+        "http://java-mouse.ru"})
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
