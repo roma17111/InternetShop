@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
 
     @Column(name = "file_size")
     private Integer fileSize;

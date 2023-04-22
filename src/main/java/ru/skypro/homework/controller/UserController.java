@@ -18,6 +18,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UserInfoDto;
 import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.AvatarService;
 
 import java.io.*;
 
@@ -30,6 +31,7 @@ import java.io.*;
 public class UserController {
 
     private final AuthService authService;
+    private final AvatarService avatarService;
 
     @PatchMapping("/me")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
@@ -55,20 +57,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/{id}/image")
-    public ResponseEntity<byte[]> getUserImage(@PathVariable long id) {
-        UserInfo userInfo = authService.getById(id);
-        System.out.println(userInfo);
-        byte[] userImg = userInfo.getImage();
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userImg);
+    @GetMapping("/avatars2/{id}")
+    public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) {
+        long a = authService.getById(id).getAvatar().getId();
+        byte[] imageBytes = avatarService.getAvatarImage(a);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
-
-    @GetMapping("/image")
-    public ResponseEntity<byte[]> getImageFromAuthUser() {
-        String email = authService.getEmailFromAuthUser();
-        UserInfo userInfo = authService.getByUserName(email);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userInfo.getImage());
-    }
-
 }
 

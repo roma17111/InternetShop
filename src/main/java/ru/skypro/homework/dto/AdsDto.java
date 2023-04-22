@@ -15,13 +15,8 @@ import javax.persistence.Table;
 @Table(name = "ads_test")
 public class AdsDto {
 
-    // id автора объявления
     long author;
-
-    // ссылка на картинку объявления
-    String image = "/ads/"+String.valueOf(this.pk)+"/image";
-
-    // id объявления
+    String image;
     long pk;
     int price;
     String title;

@@ -14,8 +14,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"comments","adsImage"})
-@Table(name = "ads_table")
+@ToString(exclude = {"comments"})
+@Table(name = "test_ads")
 public class Ads {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
@@ -31,8 +31,9 @@ public class Ads {
             mappedBy = "ads")
     List<Comment> comments;
 
-    @Column(name = "image_path")
-    byte[] adsImage;
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,13 +49,21 @@ public class Ads {
         this.description = description;
     }
 
+    private String getValidAvatar(Ads ads) {
+        if (ads.getAvatar() == null) {
+            return "";
+        } else {
+           return  "/ads/avatars2/" + String.valueOf(ads.getId());
+        }
+    }
+
     public static FullAdsDto mapToFullAdDto(Ads ads) {
         return new FullAdsDto(ads.getId(),
                 ads.getAuthor().getFirstName(),
                 ads.getAuthor().getLastName(),
                 ads.getDescription(),
                 ads.getAuthor().getEmail(),
-                "/ads/" + String.valueOf(ads.getId()) + "/image",
+                ads.getValidAvatar(ads),
                 ads.getAuthor().getPhone(),
                 ads.getPrice(),
                 ads.getTitle());
@@ -62,7 +71,7 @@ public class Ads {
 
     public static AdsDto mapToAdsDto(Ads ads) {
         return new AdsDto(ads.getAuthor().getId(),
-                "/ads/" + String.valueOf(ads.getId()) + "/image",
+                ads.getValidAvatar(ads),
                 ads.getId(),
                 ads.getPrice(),
                 ads.getTitle());

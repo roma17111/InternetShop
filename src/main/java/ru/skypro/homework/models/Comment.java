@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "Comment_table")
+@Table(name = "test_ccoment")
 public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
@@ -47,9 +47,17 @@ public class Comment {
         this.text = text;
     }
 
+    private String validCommentUrlImageUser(Comment comment) {
+        if (comment.getAuthor().getAvatar() == null) {
+            return "";
+        } else {
+            return "/ads/comments/avatars2/" + String.valueOf(comment.getId());
+        }
+    }
+
     public static CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(comment.getAuthor().getId(),
-                "/ads/comments/" + String.valueOf(comment.getId()),
+                comment.validCommentUrlImageUser(comment),
                 comment.getAuthor().getFirstName(),
                 comment.getDate(),
                 comment.getId(),

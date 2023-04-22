@@ -9,9 +9,6 @@ import ru.skypro.homework.models.UserInfo;
 import java.util.List;
 
 public interface AuthService {
-    void addUser(RegisterReqDto user);
-
-    List<RegisterReqDto> getAllUsers();
 
     UserInfo getById(long id);
 

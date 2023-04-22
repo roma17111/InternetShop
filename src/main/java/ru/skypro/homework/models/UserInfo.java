@@ -18,8 +18,8 @@ import java.util.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_test")
-@ToString(exclude = {"comments","ads","image"})
+@Table(name = "test_table_user")
+@ToString(exclude = {"comments", "ads"})
 public class UserInfo implements UserDetails {
 
     @Id
@@ -45,14 +45,10 @@ public class UserInfo implements UserDetails {
     @Column(name = "reg_date")
     private String regDate = String.valueOf(LocalDateTime.now());
 
-    @Column(name = "image")
-    private byte[] image;
-
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar_id")
     private Avatar avatar;
 
@@ -109,12 +105,30 @@ public class UserInfo implements UserDetails {
         this.role = role;
     }
 
+    public UserInfo(long id, String email, String firstName, String lastName, String phone, Avatar avatar) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.avatar = avatar;
+    }
+
+    private String getValidUserAvatar(UserInfo userInfo) {
+        if (userInfo.getAvatar() == null) {
+            return "";
+        } else {
+            return "/users/avatars2/" + String.valueOf(userInfo.getId());
+        }
+    }
     public static UserInfoDto mapToUserInfoDto(UserInfo userInfo) {
         return new UserInfoDto(userInfo.getId(),
                 userInfo.getEmail(),
                 userInfo.firstName,
                 userInfo.lastName,
-                userInfo.getPhone());
+                userInfo.getPhone(),
+                userInfo.getRegDate(),
+                userInfo.getValidUserAvatar(userInfo));
     }
 
     public void addAdFromUser(Ads a) {

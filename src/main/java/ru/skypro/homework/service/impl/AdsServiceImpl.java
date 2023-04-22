@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
@@ -10,23 +11,28 @@ import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.models.Ads;
+import ru.skypro.homework.models.Avatar;
 import ru.skypro.homework.models.Comment;
 import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Log4j
 public class AdsServiceImpl implements AdsService {
 
+    private final AvatarService avatarService;
     private final AdsRepository adsRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -183,11 +189,11 @@ public class AdsServiceImpl implements AdsService {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
-        try {
-            ads1.setAdsImage(image.getBytes());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        List<Avatar> avatars = avatarService.getAllAvatars();
+        Avatar avatar = avatars.get(avatars.size() - 1);
+        ads1.setAvatar(avatar);
+        updateAd(ads1);
         addAd(ads1);
         log.info("added ads - " + ads1);
     }
@@ -209,11 +215,10 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
-        try {
-            ads.setAdsImage(image.getBytes());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        List<Avatar> avatars = avatarService.getAllAvatars();
+        Avatar avatar = avatars.get(avatars.size() - 1);
+        ads.setAvatar(avatar);
         updateAd(ads);
     }
 

@@ -22,21 +22,20 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
-
-    AvatarServiceImpl avatarService;
+   private final AvatarServiceImpl avatarService;
 
     @PostMapping(value = "/testSave", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> testSave(@RequestParam("file") MultipartFile file) {
+        Avatar avatar = new Avatar();
         avatarService.testSave(file, MediaType.parseMediaType(Objects.requireNonNull(file.getContentType())));
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/avatars2/{id}")
-    public ResponseEntity<byte[]> getAvatarImage(@PathVariable Integer id) {
+    @GetMapping("/avatars2/{id}{dataId}")
+    public ResponseEntity<byte[]> getAvatarImage(@PathVariable long id,
+                                                 @PathVariable long dataId) {
         byte[] imageBytes = avatarService.getAvatarImage(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
     @GetMapping("/avatars1/{id}")

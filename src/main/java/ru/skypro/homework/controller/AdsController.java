@@ -2,7 +2,6 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,16 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Comment;
-import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.repository.UserRepository;
+import ru.skypro.homework.service.AvatarService;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -30,6 +22,21 @@ import java.util.List;
 public class AdsController {
 
     private final AdsService adsService;
+    private final AvatarService avatarService;
+
+    @GetMapping("/comments/avatars2/{id}")
+    public ResponseEntity<byte[]> getAvatarImageComments(@PathVariable long id) {
+        long a = adsService.getCommentById(id).getAuthor().getAvatar().getId();
+        byte[] imageBytes = avatarService.getAvatarImage(a);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
+
+    @GetMapping("/avatars2/{id}")
+    public ResponseEntity<byte[]> getAvatarImageAds(@PathVariable long id) {
+        long a = adsService.findById(id).getAvatar().getId();
+        byte[] imageBytes = avatarService.getAvatarImage(a);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
 
     @GetMapping("/me")
     public ResponseWrapperAds getAdsMe() {
@@ -52,12 +59,6 @@ public class AdsController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/{id}/image")
-    public ResponseEntity<byte[]> getImage(@PathVariable long id) {
-        Ads ads = adsService.findById(id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(ads.getAdsImage());
-    }
-
     @GetMapping("/{id}/comments")
     public ResponseWrapperComment getComments(@PathVariable int id) {
         List<CommentDto> commentDtoList = adsService.getCommentDtoList(id);
@@ -71,13 +72,6 @@ public class AdsController {
         Comment comment1 = new Comment(commentDto.getText());
         adsService.addCommentToAd(comment1, id);
         return Comment.mapToCommentDto(comment1);
-    }
-
-    @GetMapping("/comments/{id}")
-    public ResponseEntity<byte[]> getImageComments(@PathVariable long id) {
-        Comment comment = adsService.getCommentById(id);
-        byte[] image = comment.getAuthor().getImage();
-        return ResponseEntity.ok().body(image);
     }
 
     @GetMapping("/{id}")

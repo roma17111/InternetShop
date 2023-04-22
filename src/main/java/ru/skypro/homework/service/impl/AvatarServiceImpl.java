@@ -2,31 +2,31 @@ package ru.skypro.homework.service.impl;
 
 import com.jcraft.jsch.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.exceptions.ResourceNotFoundException;
 import ru.skypro.homework.models.Avatar;
+import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AvatarRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
-import java.util.Random;
+import java.util.List;
 
 @Service
+@Log4j
 @RequiredArgsConstructor
-public class AvatarServiceImpl {
+public class AvatarServiceImpl implements AvatarService {
 
-    @Autowired
-    AvatarRepository avatarRepository;
+
+   private final AvatarRepository avatarRepository;
 
     @Value("${sftp.host}")
     private String SFTP_HOST;
@@ -79,7 +79,14 @@ public class AvatarServiceImpl {
         }
     }*/
 
-    public void testSave(MultipartFile file, MediaType mediaType) {
+    @Override
+    public List<Avatar> getAllAvatars() {
+        return avatarRepository.findAll();
+    }
+
+    @Override
+    public void testSave(MultipartFile file,
+                         MediaType mediaType) {
         try {
             JSch jsch = new JSch();
             Session session = jsch.getSession(SFTP_USER, SFTP_HOST, SFTP_PORT);
@@ -97,19 +104,20 @@ public class AvatarServiceImpl {
             channelSftp.disconnect();
             session.disconnect();
 
+         //   avatar.setId(new Random().nextInt(Integer.MAX_VALUE));
             Avatar avatar = new Avatar();
-            avatar.setId(new Random().nextInt(Integer.MAX_VALUE));
             avatar.setFileSize((int) file.getSize());
             avatar.setImageType(mediaType.toString());
             avatar.setAvatarPath(filePath);
 
             avatarRepository.save(avatar);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
-    public byte[] getAvatarImage(Integer avatarId) {
+    @Override
+    public byte[] getAvatarImage(long avatarId) {
         Avatar avatar = avatarRepository.findById(avatarId).orElseThrow(() -> new RuntimeException("Avatar not found"));
         String avatarPath = avatar.getAvatarPath();
 
@@ -140,7 +148,8 @@ public class AvatarServiceImpl {
         }
     }
 
-    public Resource getAvatarResource(Integer avatarId) throws JSchException, SftpException, IOException {
+    @Override
+    public Resource getAvatarResource(long avatarId) throws JSchException, SftpException, IOException {
         Avatar avatar = avatarRepository.findById(avatarId).orElseThrow();
         String avatarPath = avatar.getAvatarPath();
 
