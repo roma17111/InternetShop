@@ -48,4 +48,7 @@ public interface AdsService {
 
     void updateAdImageFromAuthUser(long id,
                                    MultipartFile image);
+
+    FullAdsDto updateAdsToAuthUser(long id,
+                                   CreateAdsDto adsDto);
 }

@@ -216,4 +216,16 @@ public class AdsServiceImpl implements AdsService {
         }
         updateAd(ads);
     }
+
+    @Override
+    public FullAdsDto updateAdsToAuthUser(long id,
+                                          CreateAdsDto adsDto) {
+        Ads ads1 = findById(id);
+        ads1.setDescription(adsDto.getDescription());
+        ads1.setPrice(adsDto.getPrice());
+        ads1.setTitle(adsDto.getTitle());
+        updateAd(ads1);
+        return Ads.mapToFullAdDto(ads1);
+    }
+
 }

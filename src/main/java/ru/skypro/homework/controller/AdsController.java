@@ -88,12 +88,7 @@ public class AdsController {
     @PatchMapping("/{id}")
     public FullAdsDto updateAds(@PathVariable int id,
                                 @RequestBody CreateAdsDto adsDto) {
-        Ads ads1 = adsService.findById(id);
-        ads1.setDescription(adsDto.getDescription());
-        ads1.setPrice(adsDto.getPrice());
-        ads1.setTitle(adsDto.getTitle());
-        adsService.updateAd(ads1);
-        return Ads.mapToFullAdDto(ads1);
+        return adsService.updateAdsToAuthUser(id,adsDto);
     }
 
     @DeleteMapping("{id}")
