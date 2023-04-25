@@ -8,12 +8,12 @@ if ! systemctl is-active --quiet docker; then
 fi
 
 # Check if the docker image already exists
-image_exists=$(docker pull ghcr.io/bizinmitya/front-react-avito:v1.10)
+image_exists=$(docker image inspect ghcr.io/bizinmitya/front-react-avito:v1.10 2> /dev/null)
 
 if [ -z "$image_exists" ]; then
     # Pull the docker image
     echo "Pulling the docker image..."
-    docker pull roman170692/shop
+    docker pull ghcr.io/bizinmitya/front-react-avito:v1.10
 fi
 
 # Check if any container is using port 3000:3000
@@ -22,20 +22,20 @@ port_check=$(docker ps --format "{{.ID}} {{.Names}}" | grep -E ":[[:space:]]+sho
 if [ -z "$port_check" ]; then
     # Create and run the first container
     echo "Creating and running the container on port 3000:3000..."
-    docker run -d -p 3000:3000 --name bizinShop ghcr.io/bizinmitya/front-react-avito
+    docker run -d -p 3000:3000 --name shop ghcr.io/bizinmitya/front-react-avito:v1.10
 else
     # Check if the container is running on port 3000:3000
     port_check=$(docker port shop | grep 3000/tcp | grep 0.0.0.0:3000)
-    
+
     if [ -z "$port_check" ]; then
         while true; do
             echo -e "\nThe existing 'shop' container is not running on port 3000:3000. Do you want to recreate it on port 3000:3000? (y/n)"
             read recreate_choice
-            
+
             if [ "$recreate_choice" == "y" ]; then
                 docker stop shop; docker rm shop
                 echo "Recreating the container on port 3000:3000..."
-                docker run -d -p 3000:3000 --name shop roman170692/shop
+                docker run -d -p 3000:3000 --name shop ghcr.io/bizinmitya/front-react-avito:v1.10
                 break
             elif [ "$recreate_choice" == "n" ]; then
                 break
@@ -53,7 +53,7 @@ while true; do
     echo "2. Start the container again"
     echo "3. Open the link in the browser"
     echo "4. Remove the container (also running)"
-    echo "5. Check for a newer version of the image"
+    echo "5. Repull new v1.10 docker image"
     echo "6. Remove the Docker image"
     echo "7. Restart init (this will restart script)"
     echo "8. Exit"
@@ -98,8 +98,8 @@ while true; do
         ;;
         5)
             # Check for a newer version of the image
-            echo "Checking for a newer version of the image..."
-            docker pull roman170692/shop
+            echo "Re:pulling front end with 1.10 version..."
+            docker pull ghcr.io/bizinmitya/front-react-avito:v1.10
         ;;
         6)
             while true; do
@@ -118,7 +118,7 @@ while true; do
                                 read remove_image_choice
                                 
                                 if [ "$remove_image_choice" == "y" ]; then
-                                    docker rmi roman170692/shop
+                                    docker rmi ghcr.io/bizinmitya/front-react-avito:v1.10
                                     echo -e "\nThe Docker image for 'shop' has been removed."
                                     break 3
                                     elif [ "$remove_image_choice" == "n" ]; then
