@@ -2,20 +2,18 @@ package ru.skypro.homework.service.impl;
 
 import com.jcraft.jsch.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.models.Avatar;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AvatarRepository;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 @Service
-@Log4j
+@Slf4j
 @RequiredArgsConstructor
 public class AvatarServiceImpl implements AvatarService {
 

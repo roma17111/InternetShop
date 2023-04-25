@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping("/avatars2/{id}")
-    @Operation(summary = "Показать аватар авторизованного пользователя")
+    @Operation(summary = "Показать аватар пользователя")
     @ApiResponse(responseCode = "200",description = "OK")
     @ApiResponse(responseCode = "404",description = "Not Found")
     public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) throws ExecutionException, InterruptedException {

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -8,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
@@ -20,12 +20,10 @@ import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.UserRepository;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@Log4j
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
