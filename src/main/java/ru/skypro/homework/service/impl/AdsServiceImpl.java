@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,16 +20,13 @@ import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Log4j
+@Slf4j
 public class AdsServiceImpl implements AdsService {
 
     private final AvatarService avatarService;
@@ -231,6 +228,22 @@ public class AdsServiceImpl implements AdsService {
         ads1.setTitle(adsDto.getTitle());
         updateAd(ads1);
         return Ads.mapToFullAdDto(ads1);
+    }
+
+    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Ads ads) {
+        if (userInfo.equals(ads.getAuthor())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Comment comment) {
+        if (userInfo.equals(comment.getAuthor())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

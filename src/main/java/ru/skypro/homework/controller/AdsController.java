@@ -19,7 +19,8 @@ import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru"})
+        "http://java-mouse.ru",
+        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor
