@@ -31,19 +31,19 @@ public class AvatarServiceImpl implements AvatarService {
     private final AvatarRepository avatarRepository;
 
     @Value("${sftp.host}")
-    private String SFTP_HOST;
+    private String sftpHost;
 
     @Value("${sftp.port}")
-    private int SFTP_PORT;
+    private int sftpPort;
 
     @Value("${sftp.user}")
-    private String SFTP_USER;
+    private String sftpUser;
 
     @Value("${sftp.password}")
-    private String SFTP_PASSWORD;
+    private String sftpPassword;
 
     @Value("${sftp.directory}")
-    private String SFTP_DIRECTORY;
+    private String sftpDirectory;
 
     @Override
     public List<Avatar> getAllAvatars() {
@@ -58,7 +58,7 @@ public class AvatarServiceImpl implements AvatarService {
             try {
                 channelSftp = setupJsch();
                 InputStream inputStream = file.getInputStream();
-                String filePath = SFTP_DIRECTORY + file.getOriginalFilename();
+                String filePath = sftpDirectory + file.getOriginalFilename();
                 channelSftp.put(inputStream, filePath);
                 Avatar avatar = new Avatar();
                 avatar.setFileSize((int) file.getSize());
@@ -149,8 +149,8 @@ public class AvatarServiceImpl implements AvatarService {
 
     private ChannelSftp setupJsch() throws JSchException {
         JSch jsch = new JSch();
-        Session session = jsch.getSession(SFTP_USER, SFTP_HOST, SFTP_PORT);
-        session.setPassword(SFTP_PASSWORD);
+        Session session = jsch.getSession(sftpUser, sftpHost, sftpPort);
+        session.setPassword(sftpPassword);
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
         Channel channel = session.openChannel("sftp");

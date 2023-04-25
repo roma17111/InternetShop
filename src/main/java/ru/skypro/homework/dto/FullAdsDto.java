@@ -19,7 +19,7 @@ public class FullAdsDto {
     String description;
     String email;
     // url image
-    String image = "/ads/"+String.valueOf(this.pk)+"/image";
+    String image;
     String phone;
     int price;
     String title;
