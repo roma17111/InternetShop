@@ -56,11 +56,11 @@ public class UserInfo implements UserDetails {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Ads> ads;
+
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Comment> comments;
-
 
     public UserInfo(String firstName, String lastName, String phone) {
         this.firstName = firstName;
