@@ -1,5 +1,7 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 
 @Slf4j
-//Есть свой работающий сайт. Добавил домен, чтобы туда сюда хосты не менять. Работает номрально
+
 @CrossOrigin(value = {"http://localhost:3000",
         "http://java-mouse.ru"})
 @RestController
@@ -37,11 +39,22 @@ public class UserController {
     private final AvatarService avatarService;
 
     @PatchMapping("/me")
+    @Operation(summary = "Обновить информацию об авторизованном пользователе")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "201",description = "No Content")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    @ApiResponse(responseCode = "403",description = "Forbidden")
+    @ApiResponse(responseCode = "404",description = "Not Found")
     public UserInfoDto updateUser(@RequestBody UserInfoDto userInfoDto) {
         return authService.updateAuthUser(userInfoDto);
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Получить информацию об авторизованном пользователе")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    @ApiResponse(responseCode = "403",description = "Forbidden")
+    @ApiResponse(responseCode = "404",description = "Not Found")
     public UserInfoDto getUser() {
         String userName = authService.getEmailFromAuthUser();
         UserInfo userInfo = authService.getByUserName(userName);
@@ -49,18 +62,29 @@ public class UserController {
     }
 
     @PostMapping("/set_password")
+    @Operation(summary = "Обновление пароля")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "401",description = "Unauthorized")
+    @ApiResponse(responseCode = "403",description = "Forbidden")
+    @ApiResponse(responseCode = "404",description = "Not Found")
     public NewPassword setPassword(@RequestBody NewPassword password) {
         authService.setPasswordFromUser(password.getNewPassword());
         return new NewPassword();
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image) throws IOException {
+    @Operation(summary = "Обновить аватар авторизованного пользователя")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "404",description = "Not Found")
+    public ResponseEntity<?> updateUserImage(@RequestParam MultipartFile image){
         authService.updateUserImage(image);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/avatars2/{id}")
+    @Operation(summary = "Показать аватар авторизованного пользователя")
+    @ApiResponse(responseCode = "200",description = "OK")
+    @ApiResponse(responseCode = "404",description = "Not Found")
     public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) throws ExecutionException, InterruptedException {
         long a = authService.getById(id).getAvatar().getId();
         byte[] imageBytes = avatarService.getAvatarImage(a);
