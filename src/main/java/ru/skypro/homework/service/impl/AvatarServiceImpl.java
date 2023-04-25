@@ -28,7 +28,6 @@ import java.util.concurrent.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@EnableAsync
 public class AvatarServiceImpl implements AvatarService {
 
     private final AvatarRepository avatarRepository;
