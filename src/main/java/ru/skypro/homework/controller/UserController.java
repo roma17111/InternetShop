@@ -27,9 +27,9 @@ import java.util.concurrent.ExecutionException;
 
 
 @Slf4j
-
 @CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru"})
+        "http://java-mouse.ru",
+        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor

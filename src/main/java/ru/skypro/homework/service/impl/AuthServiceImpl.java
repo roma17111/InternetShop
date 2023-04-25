@@ -30,8 +30,6 @@ import java.util.Objects;
 public class AuthServiceImpl implements AuthService {
 
     private final AvatarService avatarService;
-    private final UserDetailsManager manager;
-
     private final PasswordEncoder encoder;
 
     private final UserRepository userRepository;
@@ -39,11 +37,9 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserDetailsService customUserDetailsService;
 
     public AuthServiceImpl(AvatarService avatarService,
-                           UserDetailsManager manager,
                            UserRepository userRepository,
                            CustomUserDetailsService customUserDetailsService) {
         this.avatarService = avatarService;
-        this.manager = manager;
         this.userRepository = userRepository;
         this.customUserDetailsService = customUserDetailsService;
         this.encoder = new BCryptPasswordEncoder();

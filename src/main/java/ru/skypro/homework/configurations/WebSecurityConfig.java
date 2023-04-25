@@ -31,30 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register",
-            // это ссылки на фото объявлений. Они видны любым пользователям
-            "/ads/image/**",
-            "/ads/image/test/**",
-            "/ads/**","/avatars1/**","/avatars2/**"
+            "/ads/**"
     };
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user@gmail.com")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService())
-                .and()
-                .inMemoryAuthentication()
-                .and().userDetailsService(userDetailsService)
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -66,10 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
-
                 )
                 .cors().and()
                 .httpBasic(withDefaults()).userDetailsService(userDetailsService);
+
     }
 
     @Bean

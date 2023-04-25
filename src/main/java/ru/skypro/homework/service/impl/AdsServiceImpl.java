@@ -21,8 +21,6 @@ import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -231,6 +229,22 @@ public class AdsServiceImpl implements AdsService {
         ads1.setTitle(adsDto.getTitle());
         updateAd(ads1);
         return Ads.mapToFullAdDto(ads1);
+    }
+
+    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Ads ads) {
+        if (userInfo.equals(ads.getAuthor())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Comment comment) {
+        if (userInfo.equals(comment.getAuthor())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
