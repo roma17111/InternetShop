@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -233,5 +232,25 @@ public class AdsServiceImpl implements AdsService {
         updateAd(ads1);
         return Ads.mapToFullAdDto(ads1);
     }
+
+    @Override
+    public boolean isUserOwnerToAds(long id) {
+        Ads ads = findById(id);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        List<Ads> adsList = userInfo.getAds();
+        return adsList.contains(ads);
+    }
+
+    @Override
+    public boolean isUserOwnerToComment(long id) {
+        Comment comment = getCommentById(id);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        List<Comment> comments = userInfo.getComments();
+        return comments.contains(comment);
+    }
+
+
 
 }

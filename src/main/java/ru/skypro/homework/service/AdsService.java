@@ -51,4 +51,8 @@ public interface AdsService {
 
     FullAdsDto updateAdsToAuthUser(long id,
                                    CreateAdsDto adsDto);
+
+    boolean isUserOwnerToAds(long id);
+
+    boolean isUserOwnerToComment(long id);
 }
