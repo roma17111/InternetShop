@@ -151,11 +151,14 @@ public class AdsServiceImpl implements AdsService {
             commentDtoList.add(Comment.mapToCommentDto(comment1));
         }
 
-        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех комментах
+        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех коммент
         if (authService.userIsAdmin()) {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
             for (CommentDto dto : commentDtoList) {
+                // По логике фронтенда карандаш и крестик рисуется если твой id из бвзы
+                // совпадает с pk в dto. Нам ничего не мешает подменить фронтенду pk
+                // на нужный, что бы он брался не из базы автора, а от админа
                 dto.setAuthor(userInfo.getId());
             }
         }
@@ -205,6 +208,9 @@ public class AdsServiceImpl implements AdsService {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
             FullAdsDto fullAdsDto = Ads.mapToFullAdDto(ads1);
+            // По логике фронтенда карандаш и крестик рисуется если твой email
+            // совпадает с email в dto. Нам ничего не мешает подменить фронтенду email
+            // на нужный, что бы он брался не из базы автора а от админа
             fullAdsDto.setEmail(userInfo.getEmail());
             return fullAdsDto;
         }
