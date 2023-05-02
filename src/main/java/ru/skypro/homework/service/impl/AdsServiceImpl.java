@@ -231,19 +231,11 @@ public class AdsServiceImpl implements AdsService {
     }
 
     private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Ads ads) {
-        if (userInfo.equals(ads.getAuthor())) {
-            return true;
-        } else {
-            return false;
-        }
+        return userInfo.equals(ads.getAuthor());
     }
 
     private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Comment comment) {
-        if (userInfo.equals(comment.getAuthor())) {
-            return true;
-        } else {
-            return false;
-        }
+        return userInfo.equals(comment.getAuthor());
     }
 
 }
