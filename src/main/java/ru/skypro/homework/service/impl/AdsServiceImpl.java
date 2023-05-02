@@ -142,6 +142,7 @@ public class AdsServiceImpl implements AdsService {
         return commentDtoList;
     }
 
+
     @Override
     public List<CommentDto> getCommentDtoList(long id) {
         Ads ads = findById(id);
@@ -150,6 +151,8 @@ public class AdsServiceImpl implements AdsService {
         for (Comment comment1 : comments) {
             commentDtoList.add(Comment.mapToCommentDto(comment1));
         }
+
+        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех комментах
         if (authService.userIsAdmin()) {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
@@ -198,6 +201,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAdsDto getFullAd(long id) {
         Ads ads1 = findById(id);
+        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех объявлениях
         if (authService.userIsAdmin()) {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
