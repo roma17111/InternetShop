@@ -101,11 +101,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean userIsAdmin() {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        if (userInfo.getRole().equals(Role.ADMIN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return userInfo.getRole().equals(Role.ADMIN);
     }
 
     @Override

@@ -238,8 +238,7 @@ public class AdsServiceImpl implements AdsService {
         Ads ads = findById(id);
         String email = authService.getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        List<Ads> adsList = userInfo.getAds();
-        return adsList.contains(ads);
+        return ads.getAuthor().equals(userInfo);
     }
 
     @Override
@@ -247,10 +246,7 @@ public class AdsServiceImpl implements AdsService {
         Comment comment = getCommentById(id);
         String email = authService.getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        List<Comment> comments = userInfo.getComments();
-        return comments.contains(comment);
+        return comment.getAuthor().equals(userInfo);
     }
-
-
 
 }
