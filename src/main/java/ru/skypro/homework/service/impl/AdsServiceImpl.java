@@ -230,12 +230,4 @@ public class AdsServiceImpl implements AdsService {
         return Ads.mapToFullAdDto(ads1);
     }
 
-    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Ads ads) {
-        return userInfo.equals(ads.getAuthor());
-    }
-
-    private boolean isUserOwnerAdsOrComment(UserInfo userInfo, Comment comment) {
-        return userInfo.equals(comment.getAuthor());
-    }
-
 }
