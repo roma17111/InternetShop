@@ -20,7 +20,6 @@ import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.UserRepository;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -121,7 +120,9 @@ public class AuthServiceImpl implements AuthService {
     public void updateUserImage(MultipartFile image) {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = getByUserName(email);
-        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        List<Avatar> avatars = avatarService.getAllAvatars();
+        Avatar avatar = avatars.get(avatars.size() - 1);
         userInfo.setAvatar(avatar);
         saveUser(userInfo);
     }

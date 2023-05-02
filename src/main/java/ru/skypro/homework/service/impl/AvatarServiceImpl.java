@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import com.jcraft.jsch.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.models.Avatar;
@@ -20,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.*;
 
 @Service
 @Slf4j
@@ -49,15 +53,14 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public Avatar testSave(MultipartFile file, MediaType mediaType) {
-        Avatar avatar = null;
+    public void testSave(MultipartFile file, MediaType mediaType) {
         ChannelSftp channelSftp = null;
         try {
             channelSftp = setupJsch();
             InputStream inputStream = file.getInputStream();
             String filePath = SFTP_DIRECTORY + file.getOriginalFilename();
             channelSftp.put(inputStream, filePath);
-            avatar = new Avatar();
+            Avatar avatar = new Avatar();
             avatar.setFileSize((int) file.getSize());
             avatar.setImageType(mediaType.toString());
             avatar.setAvatarPath(filePath);
@@ -69,7 +72,6 @@ public class AvatarServiceImpl implements AvatarService {
                 channelSftp.disconnect();
             }
         }
-        return avatar;
     }
 
     @Override

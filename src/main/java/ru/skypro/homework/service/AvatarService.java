@@ -14,8 +14,8 @@ import java.util.concurrent.ExecutionException;
 public interface AvatarService {
     List<Avatar> getAllAvatars();
 
-
-    Avatar testSave(MultipartFile file, MediaType mediaType);
+    void testSave(MultipartFile file,
+                  MediaType mediaType);
 
     byte[] getAvatarImage(long avatarId) throws ExecutionException, InterruptedException;
 
