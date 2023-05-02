@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString(exclude = {"comments"})
 @Table(name = "test_ads")
-public class Ads {
+public class    Ads {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,

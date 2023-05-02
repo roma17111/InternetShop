@@ -31,7 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register",
-            "/ads/**"
+            "/ads",
+            "/ads/avatars2/**"//это аватары изображений объявлений
     };
 
     @Override
@@ -47,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/ads**", "/users/**").authenticated()
                 )
                 .cors().and()
                 .httpBasic(withDefaults()).userDetailsService(userDetailsService);
