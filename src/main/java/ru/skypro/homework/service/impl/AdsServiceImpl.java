@@ -19,6 +19,7 @@ import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -94,7 +95,7 @@ public class AdsServiceImpl implements AdsService {
         comment.setAuthor(userInfo);
         comment.setAds(ads);
         ads.addComment(comment);
-        log.info("added comment " + comment.getText()+"to ads "+ ads.getDescription());
+        log.info("added comment " + comment.getText() + "to ads " + ads.getDescription());
         commentRepository.save(comment);
         adsRepository.save(ads);
     }
@@ -191,9 +192,7 @@ public class AdsServiceImpl implements AdsService {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
-        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        Avatar avatar = avatars.get(avatars.size() - 1);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         ads1.setAvatar(avatar);
         updateAd(ads1);
         addAd(ads1);
@@ -221,9 +220,7 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
-        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        Avatar avatar = avatars.get(avatars.size() - 1);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         ads.setAvatar(avatar);
         updateAd(ads);
     }
