@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CommentDto;
@@ -41,8 +42,10 @@ public interface AdsService {
 
     List<AdsDto> getAdsFromAllUsers();
 
-    void uploadFileAndAd(MultipartFile image,
-                         CreateAdsDto properties);
+
+    @SneakyThrows
+    AdsDto uploadFileAndAd(MultipartFile image,
+                           CreateAdsDto properties);
 
     FullAdsDto getFullAd(long id);
 

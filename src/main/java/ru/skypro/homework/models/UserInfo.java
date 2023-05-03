@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.Role;
@@ -19,7 +20,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "test_table_user")
-@ToString(exclude = {"comments", "ads"})
+@ToString(exclude = {"comments", "ads","image"})
 public class UserInfo implements UserDetails {
 
     @Id
@@ -61,6 +62,9 @@ public class UserInfo implements UserDetails {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @Column(name = "page")
+    byte[] image;
 
     public UserInfo(String firstName, String lastName, String phone) {
         this.firstName = firstName;
@@ -115,11 +119,7 @@ public class UserInfo implements UserDetails {
     }
 
     private String getValidUserAvatar(UserInfo userInfo) {
-        if (userInfo.getAvatar() == null) {
-            return "";
-        } else {
             return "/users/avatars2/" + String.valueOf(userInfo.getId());
-        }
     }
     public static UserInfoDto mapToUserInfoDto(UserInfo userInfo) {
         return new UserInfoDto(userInfo.getId(),

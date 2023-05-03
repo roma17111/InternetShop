@@ -48,11 +48,7 @@ public class Comment {
     }
 
     private String validCommentUrlImageUser(Comment comment) {
-        if (comment.getAuthor().getAvatar() == null) {
-            return "";
-        } else {
             return "/ads/comments/avatars2/" + String.valueOf(comment.getId());
-        }
     }
 
     public static CommentDto mapToCommentDto(Comment comment) {

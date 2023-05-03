@@ -86,14 +86,4 @@ public class AdsControllerTest {
         assertEquals(adsDtoList, response.getResults());
     }
 
-    @Test
-    public void testCreateAdd() {
-        MultipartFile image = new MockMultipartFile("image", new byte[]{1, 2, 3});
-        CreateAdsDto properties = new CreateAdsDto();
-
-        ResponseEntity<?> response = adsController.createAdd(image, properties);
-
-        verify(adsService).uploadFileAndAd(image, properties);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
 }

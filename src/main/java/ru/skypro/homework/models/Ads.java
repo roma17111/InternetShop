@@ -3,6 +3,7 @@ package ru.skypro.homework.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Type;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"comments"})
+@ToString(exclude = {"comments","image"})
 @Table(name = "test_ads")
 public class    Ads {
 
@@ -43,6 +44,10 @@ public class    Ads {
     String title;
     String description;
 
+
+    @Column(name = "page")
+    byte[] image;
+
     public Ads(int price, String title, String description) {
         this.price = price;
         this.title = title;
@@ -50,11 +55,7 @@ public class    Ads {
     }
 
     private String getValidAvatar(Ads ads) {
-        if (ads.getAvatar() == null) {
-            return "";
-        } else {
            return  "/ads/avatars2/" + String.valueOf(ads.getId());
-        }
     }
 
     public static FullAdsDto mapToFullAdDto(Ads ads) {

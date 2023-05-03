@@ -34,16 +34,14 @@ public class AdsController {
 
     @GetMapping("/comments/avatars2/{id}")
     public ResponseEntity<byte[]> getAvatarImageComments(@PathVariable long id) throws ExecutionException, InterruptedException {
-        long a = adsService.getCommentById(id).getAuthor().getAvatar().getId();
-        byte[] imageBytes = avatarService.getAvatarImage(a);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        byte[] imageBytes = adsService.getCommentById(id).getAuthor().getImage();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(imageBytes);
     }
 
     @GetMapping("/avatars2/{id}")
     public ResponseEntity<byte[]> getAvatarImageAds(@PathVariable long id) throws ExecutionException, InterruptedException {
-        long a = adsService.findById(id).getAvatar().getId();
-        byte[] imageBytes = avatarService.getAvatarImage(a);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        byte[] imageBytes = adsService.findById(id).getImage();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(imageBytes);
     }
 
     @GetMapping("/me")
@@ -70,12 +68,11 @@ public class AdsController {
     @ApiResponse(responseCode = "404", description = "Not Found")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<?> createAdd(@RequestPart(name = "image")
+    public AdsDto createAdd(@RequestPart(name = "image")
                                        MultipartFile image,
                                        @RequestPart(name = "properties")
                                        CreateAdsDto properties) {
-        adsService.uploadFileAndAd(image, properties);
-        return ResponseEntity.ok().build();
+       return adsService.uploadFileAndAd(image, properties);
     }
 
     @GetMapping("/{id}/comments")

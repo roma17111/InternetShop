@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -15,12 +16,15 @@ import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserInfoDto;
+import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Avatar;
 import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.UserRepository;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
@@ -117,12 +121,15 @@ public class AuthServiceImpl implements AuthService {
         return UserInfo.mapToUserInfoDto(userInfo);
     }
 
+    @SneakyThrows
     @Override
     public void updateUserImage(MultipartFile image) {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = getByUserName(email);
         Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         userInfo.setAvatar(avatar);
+        byte[] i = image.getBytes();
+        userInfo.setImage(i);
         saveUser(userInfo);
     }
 }

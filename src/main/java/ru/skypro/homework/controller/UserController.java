@@ -86,9 +86,8 @@ public class UserController {
     @ApiResponse(responseCode = "200",description = "OK")
     @ApiResponse(responseCode = "404",description = "Not Found")
     public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) throws ExecutionException, InterruptedException {
-        long a = authService.getById(id).getAvatar().getId();
-        byte[] imageBytes = avatarService.getAvatarImage(a);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        byte[] imageBytes = authService.getById(id).getImage();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(imageBytes);
     }
 }
 

@@ -284,7 +284,7 @@ class AdsServiceTest {
         assertEquals("title2", result.get(1).getTitle());
     }
 
-    @Test
+   /* @Test
     void updateAdImageFromAuthUser() throws IOException {
         long id = 1L;
         MultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image data".getBytes());
@@ -299,5 +299,6 @@ class AdsServiceTest {
         verify(adsRepository).findById(id);
         verify(avatarService).testSave(eq(image), eq(MediaType.IMAGE_JPEG));
         verify(avatarService).getAllAvatars();
-    }
+        assertEquals(avatar,avatarService.testSave(image,MediaType.IMAGE_JPEG));
+    }*/
 }

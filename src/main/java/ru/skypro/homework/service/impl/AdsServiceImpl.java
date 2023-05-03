@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class AdsServiceImpl implements AdsService {
         userInfo.addAdFromUser(ads);
         ads.setAuthor(userInfo);
         log.info("added add " + ads.getDescription());
+        adsRepository.save(ads);
         userRepository.save(userInfo);
     }
 
@@ -186,17 +188,21 @@ public class AdsServiceImpl implements AdsService {
         return adsDtoList;
     }
 
+    @SneakyThrows
     @Override
-    public void uploadFileAndAd(MultipartFile image,
-                                CreateAdsDto properties) {
+    public AdsDto uploadFileAndAd(MultipartFile image,
+                                  CreateAdsDto properties) {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
+        byte[] i = image.getBytes();
+        ads1.setImage(i);
+        addAd(ads1);
+        log.info("added ads - " + ads1);
         Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         ads1.setAvatar(avatar);
         updateAd(ads1);
-        addAd(ads1);
-        log.info("added ads - " + ads1);
+        return Ads.mapToAdsDto(ads1);
     }
 
     @Override
@@ -216,12 +222,15 @@ public class AdsServiceImpl implements AdsService {
         return Ads.mapToFullAdDto(ads1);
     }
 
+    @SneakyThrows
     @Override
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
         Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         ads.setAvatar(avatar);
+        byte[] i = image.getBytes();
+        ads.setImage(i);
         updateAd(ads);
     }
 
