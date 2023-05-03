@@ -126,10 +126,11 @@ public class AuthServiceImpl implements AuthService {
     public void updateUserImage(MultipartFile image) {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = getByUserName(email);
-        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        userInfo.setAvatar(avatar);
         byte[] i = image.getBytes();
         userInfo.setImage(i);
+        saveUser(userInfo);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        userInfo.setAvatar(avatar);
         saveUser(userInfo);
     }
 }

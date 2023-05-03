@@ -227,10 +227,11 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
-        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        ads.setAvatar(avatar);
         byte[] i = image.getBytes();
         ads.setImage(i);
+        updateAd(ads);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        ads.setAvatar(avatar);
         updateAd(ads);
     }
 
