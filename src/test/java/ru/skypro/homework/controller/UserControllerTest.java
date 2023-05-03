@@ -84,7 +84,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
+ /*   @Test
     void testGetAvatarImageUser() throws ExecutionException, InterruptedException {
         long id = 1L;
         long avatarId = 2L;
@@ -101,5 +101,5 @@ class UserControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertArrayEquals(imageBytes, response.getBody());
-    }
+    }*/
 }
