@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.CommentDto;
 import javax.persistence.*;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -36,7 +37,8 @@ public class Comment {
     })
     @JoinColumn(name = "ads_id", referencedColumnName = "ads_id")
     Ads ads;
-    long date = (new Date().getTime()/1000);
+    long date = (LocalDateTime.now().toInstant(ZoneOffset.ofHours(3)).toEpochMilli());
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

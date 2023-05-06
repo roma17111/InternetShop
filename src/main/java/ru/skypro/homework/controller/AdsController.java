@@ -119,7 +119,7 @@ public class AdsController {
 
         }
         ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        return null;
+        throw new UnsupportedOperationException("Not access to operation");
     }
 
     @DeleteMapping("{id}")
@@ -162,7 +162,7 @@ public class AdsController {
             return new ResponseWrapperComment(comments.size(), adsService.mapListToCommentDto(comments));
         }
         ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        return null;
+        throw new UnsupportedOperationException("Not access to operation");
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
@@ -178,6 +178,6 @@ public class AdsController {
             return adsService.updateComment(adId, commentId, commentDto);
         }
         ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        return null;
+        throw new UnsupportedOperationException("Not access to operation");
     }
 }
