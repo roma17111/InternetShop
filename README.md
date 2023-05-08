@@ -50,11 +50,11 @@
 ### Arch
 C использованием pacman
 ```shell
-$ sudo pacman -S docker maven 
+$ sudo pacman -S docker maven jre-openjdk
 ```
 или с использованием AUR
 ```shell
-$ yay/paru -S docker maven
+$ yay/paru -S docker maven jre-openjdk
 ```
 
 ### Ubuntu

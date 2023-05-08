@@ -27,9 +27,9 @@ import java.util.concurrent.ExecutionException;
 
 
 @Slf4j
-
 @CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru"})
+        "http://java-mouse.ru",
+        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -82,13 +82,12 @@ public class UserController {
     }
 
     @GetMapping("/avatars2/{id}")
-    @Operation(summary = "Показать аватар авторизованного пользователя")
+    @Operation(summary = "Показать аватар пользователя")
     @ApiResponse(responseCode = "200",description = "OK")
     @ApiResponse(responseCode = "404",description = "Not Found")
     public ResponseEntity<byte[]> getAvatarImageUser(@PathVariable long id) throws ExecutionException, InterruptedException {
-        long a = authService.getById(id).getAvatar().getId();
-        byte[] imageBytes = avatarService.getAvatarImage(a);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        byte[] imageBytes = authService.getById(id).getImage();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(imageBytes);
     }
 }
 

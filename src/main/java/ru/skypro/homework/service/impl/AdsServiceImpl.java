@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.log4j.Log4j;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,15 +21,13 @@ import ru.skypro.homework.service.repository.AdsRepository;
 import ru.skypro.homework.service.repository.CommentRepository;
 import ru.skypro.homework.service.repository.UserRepository;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Log4j
+@Slf4j
 public class AdsServiceImpl implements AdsService {
 
     private final AvatarService avatarService;
@@ -45,6 +43,7 @@ public class AdsServiceImpl implements AdsService {
         userInfo.addAdFromUser(ads);
         ads.setAuthor(userInfo);
         log.info("added add " + ads.getDescription());
+        adsRepository.save(ads);
         userRepository.save(userInfo);
     }
 
@@ -98,7 +97,7 @@ public class AdsServiceImpl implements AdsService {
         comment.setAuthor(userInfo);
         comment.setAds(ads);
         ads.addComment(comment);
-        log.info("added comment " + comment.getText()+"to ads "+ ads.getDescription());
+        log.info("added comment " + comment.getText() + "to ads " + ads.getDescription());
         commentRepository.save(comment);
         adsRepository.save(ads);
     }
@@ -145,6 +144,7 @@ public class AdsServiceImpl implements AdsService {
         return commentDtoList;
     }
 
+
     @Override
     public List<CommentDto> getCommentDtoList(long id) {
         Ads ads = findById(id);
@@ -153,10 +153,15 @@ public class AdsServiceImpl implements AdsService {
         for (Comment comment1 : comments) {
             commentDtoList.add(Comment.mapToCommentDto(comment1));
         }
+
+        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех коммент
         if (authService.userIsAdmin()) {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
             for (CommentDto dto : commentDtoList) {
+                // По логике фронтенда карандаш и крестик рисуется если твой id из бвзы
+                // совпадает с pk в dto. Нам ничего не мешает подменить фронтенду pk
+                // на нужный, что бы он брался не из базы автора, а от админа
                 dto.setAuthor(userInfo.getId());
             }
         }
@@ -183,41 +188,49 @@ public class AdsServiceImpl implements AdsService {
         return adsDtoList;
     }
 
+    @SneakyThrows
     @Override
-    public void uploadFileAndAd(MultipartFile image,
-                                CreateAdsDto properties) {
+    public AdsDto uploadFileAndAd(MultipartFile image,
+                                  CreateAdsDto properties) {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
-        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        Avatar avatar = avatars.get(avatars.size() - 1);
-        ads1.setAvatar(avatar);
-        updateAd(ads1);
+        byte[] i = image.getBytes();
+        ads1.setImage(i);
         addAd(ads1);
         log.info("added ads - " + ads1);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
+        ads1.setAvatar(avatar);
+        updateAd(ads1);
+        return Ads.mapToAdsDto(ads1);
     }
 
     @Override
     public FullAdsDto getFullAd(long id) {
         Ads ads1 = findById(id);
+        // если юзер-админ, То во фронтенде будет покажываться ручка и крестик во всех объявлениях
         if (authService.userIsAdmin()) {
             String email = authService.getEmailFromAuthUser();
             UserInfo userInfo = userRepository.findByEmail(email);
             FullAdsDto fullAdsDto = Ads.mapToFullAdDto(ads1);
+            // По логике фронтенда карандаш и крестик рисуется если твой email
+            // совпадает с email в dto. Нам ничего не мешает подменить фронтенду email
+            // на нужный, что бы он брался не из базы автора а от админа
             fullAdsDto.setEmail(userInfo.getEmail());
             return fullAdsDto;
         }
         return Ads.mapToFullAdDto(ads1);
     }
 
+    @SneakyThrows
     @Override
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
-        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        Avatar avatar = avatars.get(avatars.size() - 1);
+        byte[] i = image.getBytes();
+        ads.setImage(i);
+        updateAd(ads);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         ads.setAvatar(avatar);
         updateAd(ads);
     }
@@ -231,6 +244,22 @@ public class AdsServiceImpl implements AdsService {
         ads1.setTitle(adsDto.getTitle());
         updateAd(ads1);
         return Ads.mapToFullAdDto(ads1);
+    }
+
+    @Override
+    public boolean isUserOwnerToAds(long id) {
+        Ads ads = findById(id);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        return ads.getAuthor().equals(userInfo);
+    }
+
+    @Override
+    public boolean isUserOwnerToComment(long id) {
+        Comment comment = getCommentById(id);
+        String email = authService.getEmailFromAuthUser();
+        UserInfo userInfo = userRepository.findByEmail(email);
+        return comment.getAuthor().equals(userInfo);
     }
 
 }

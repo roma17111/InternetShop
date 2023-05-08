@@ -3,32 +3,28 @@ package ru.skypro.homework.controller;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.models.Avatar;
-import ru.skypro.homework.service.impl.AvatarServiceImpl;
-
+import ru.skypro.homework.service.AvatarService;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 @RestController
 @CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru"})
+        "http://java-mouse.ru",
+        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
-   private final AvatarServiceImpl avatarService;
+   private final AvatarService avatarService;
 
     @PostMapping(value = "/testSave", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> testSave(@RequestParam("file") MultipartFile file) {
-        Avatar avatar = new Avatar();
         avatarService.testSave(file, MediaType.parseMediaType(Objects.requireNonNull(file.getContentType())));
         return ResponseEntity.ok().build();
     }

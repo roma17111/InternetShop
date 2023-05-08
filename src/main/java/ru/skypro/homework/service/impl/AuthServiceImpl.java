@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.extern.log4j.Log4j;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -8,30 +10,29 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.configurations.CustomUserDetailsService;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserInfoDto;
+import ru.skypro.homework.models.Ads;
 import ru.skypro.homework.models.Avatar;
 import ru.skypro.homework.models.UserInfo;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 import ru.skypro.homework.service.repository.UserRepository;
 
-import java.util.Collections;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
-@Log4j
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final AvatarService avatarService;
-    private final UserDetailsManager manager;
-
     private final PasswordEncoder encoder;
 
     private final UserRepository userRepository;
@@ -39,11 +40,9 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserDetailsService customUserDetailsService;
 
     public AuthServiceImpl(AvatarService avatarService,
-                           UserDetailsManager manager,
                            UserRepository userRepository,
                            CustomUserDetailsService customUserDetailsService) {
         this.avatarService = avatarService;
-        this.manager = manager;
         this.userRepository = userRepository;
         this.customUserDetailsService = customUserDetailsService;
         this.encoder = new BCryptPasswordEncoder();
@@ -107,11 +106,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean userIsAdmin() {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = userRepository.findByEmail(email);
-        if (userInfo.getRole().equals(Role.ADMIN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return userInfo.getRole().equals(Role.ADMIN);
     }
 
     @Override
@@ -126,13 +121,15 @@ public class AuthServiceImpl implements AuthService {
         return UserInfo.mapToUserInfoDto(userInfo);
     }
 
+    @SneakyThrows
     @Override
     public void updateUserImage(MultipartFile image) {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = getByUserName(email);
-        avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        Avatar avatar = avatars.get(avatars.size() - 1);
+        byte[] i = image.getBytes();
+        userInfo.setImage(i);
+        saveUser(userInfo);
+        Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
         userInfo.setAvatar(avatar);
         saveUser(userInfo);
     }
