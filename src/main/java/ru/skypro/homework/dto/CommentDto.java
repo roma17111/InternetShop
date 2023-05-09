@@ -6,19 +6,44 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * Класс представляющий DTO (Data Transfer Object) комментариев.
+ * Используется для передачи данных между слоями приложения.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDto {
 
-    // id author
+    /**
+     * Идентификатор автора комментария.
+     */
     long author;
-    // url image
+
+    /**
+     * Ссылка на изображение автора комментария.
+     */
     String authorImage;
+
+    /**
+     * Имя автора комментария.
+     */
     String authorFirstName;
+
+    /**
+     * Дата создания комментария.
+     */
     long createdAt;
+
+    /**
+     * Уникальный идентификатор комментария.
+     */
     long pk;
+
+    /**
+     * Текст комментария.
+     */
     String text;
 
     public CommentDto(long author,
