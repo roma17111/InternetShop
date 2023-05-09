@@ -1,15 +1,12 @@
 package ru.skypro.homework.dto;
 
-/**
- * Перечисление ролей пользователей в системе.
- */
-public enum Role {
-    /**
-     * Роль пользователя (обычный пользователь).
-     */
-    USER,
-    /**
-     * Роль администратора (имеет расширенные права).
-     */
-    ADMIN
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+    USER, ADMIN;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }
