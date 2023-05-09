@@ -1,6 +1,5 @@
 package ru.skypro.homework;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +13,9 @@ import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Конфигурация веб-безопасности приложения.
+ */
 @Configuration
 public class WebSecurityConfig {
     private static final String[] AUTH_WHITELIST = {
@@ -24,7 +26,11 @@ public class WebSecurityConfig {
             "/login", "/register"
     };
 
-
+    /**
+     * Создает сервис для хранения пользователей в памяти.
+     *
+     * @return сервис для хранения пользователей
+     */
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         for (RegisterReq user : AuthServiceImpl.getUsers()) {
@@ -43,6 +49,13 @@ public class WebSecurityConfig {
         return new InMemoryUserDetailsManager(user);
     }
 
+    /**
+     * Создает цепочку фильтров безопасности для обработки HTTP-запросов.
+     *
+     * @param http объект для настройки параметров безопасности
+     * @return цепочка фильтров безопасности
+     * @throws Exception если возникает ошибка при настройке параметров безопасности
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -51,13 +64,9 @@ public class WebSecurityConfig {
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
-
                 )
                 .cors().disable()
                 .httpBasic(withDefaults());
         return http.build();
     }
-
-
 }
-
