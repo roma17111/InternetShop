@@ -1,0 +1,10 @@
+ru.skypro.homework
+ru.skypro.homework.configurations
+ru.skypro.homework.controller
+ru.skypro.homework.dto
+ru.skypro.homework.exceptions
+ru.skypro.homework.models
+ru.skypro.homework.service
+ru.skypro.homework.service.impl
+ru.skypro.homework.service.mappers
+ru.skypro.homework.service.repository
