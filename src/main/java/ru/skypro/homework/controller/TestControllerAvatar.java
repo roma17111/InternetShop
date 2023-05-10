@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.AvatarService;
-
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class TestControllerAvatar {
 
-    private final AvatarService avatarService;
+   private final AvatarService avatarService;
 
     /**
      * Сохраняет аватар пользователя.

@@ -10,6 +10,9 @@ import ru.skypro.homework.dto.FullAdsDto;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Класс модели для рекламных объявлений.
+ */
 @Entity
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)

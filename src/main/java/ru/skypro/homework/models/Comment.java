@@ -13,6 +13,9 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * Класс модели для комментариев.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +24,9 @@ import java.util.Date;
 @Table(name = "test_ccoment")
 public class Comment {
 
+    /**
+     * Автор комментария.
+     */
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -29,6 +35,9 @@ public class Comment {
     })
     UserInfo author;
 
+    /**
+     * Объявление, к которому привязан комментарий.
+     */
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -37,22 +46,43 @@ public class Comment {
     })
     @JoinColumn(name = "ads_id", referencedColumnName = "ads_id")
     Ads ads;
+
+    /**
+     * Дата создания комментария.
+     */
     long date = (LocalDateTime.now().toInstant(ZoneOffset.ofHours(3)).toEpochMilli());
 
+    /**
+     * ID комментария.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     long id;
+
+    /**
+     * Текст комментария.
+     */
     String text;
 
     public Comment(String text) {
         this.text = text;
     }
 
+    /**
+     * Вспомогательный метод для формирования URL изображения пользователя, оставившего комментарий.
+     * @param comment Объект комментария.
+     * @return Строка URL.
+     */
     private String validCommentUrlImageUser(Comment comment) {
             return "/ads/comments/avatars2/" + String.valueOf(comment.getId());
     }
 
+    /**
+     * Метод для преобразования объекта Comment в объект CommentDto.
+     * @param comment Объект комментария.
+     * @return Объект CommentDto.
+     */
     public static CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(comment.getAuthor().getId(),
                 comment.validCommentUrlImageUser(comment),

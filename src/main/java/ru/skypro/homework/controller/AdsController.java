@@ -105,10 +105,10 @@ public class AdsController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public AdsDto createAdd(@RequestPart(name = "image")
-                            MultipartFile image,
-                            @RequestPart(name = "properties")
-                            CreateAdsDto properties) {
-        return adsService.uploadFileAndAd(image, properties);
+                                       MultipartFile image,
+                                       @RequestPart(name = "properties")
+                                       CreateAdsDto properties) {
+       return adsService.uploadFileAndAd(image, properties);
     }
 
     /**
@@ -178,6 +178,7 @@ public class AdsController {
                                 @RequestBody CreateAdsDto adsDto) {
         if (authService.userIsAdmin() || adsService.isUserOwnerToAds(id)) {
             return adsService.updateAdsToAuthUser(id, adsDto);
+
         }
         ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         throw new UnsupportedOperationException("Not access to operation");
@@ -202,6 +203,7 @@ public class AdsController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
     }
 
     /**
