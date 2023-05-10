@@ -10,6 +10,9 @@ import ru.skypro.homework.dto.FullAdsDto;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Класс модели для рекламных объявлений.
+ */
 @Entity
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,8 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString(exclude = {"comments","image"})
 @Table(name = "test_ads")
-public class    Ads {
+public class Ads {
 
+    // Пользователь, автор объявления
     @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -27,37 +31,49 @@ public class    Ads {
     })
     UserInfo author;
 
+    // Список комментариев к объявлению
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "ads")
     List<Comment> comments;
 
+    // Аватар пользователя
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "avatar_id")
     private Avatar avatar;
 
+    // ID объявления
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ads_id")
     long id;
+
+    // Цена, указанная в объявлении
     int price;
+
+    // Заголовок объявления
     String title;
+
+    // Описание объявления
     String description;
 
-
+    // Изображение объявления
     @Column(name = "page")
     byte[] image;
 
+    // Конструктор для создания объявления
     public Ads(int price, String title, String description) {
         this.price = price;
         this.title = title;
         this.description = description;
     }
 
+    // Вспомогательный метод для получения URL аватара
     private String getValidAvatar(Ads ads) {
-           return  "/ads/avatars2/" + String.valueOf(ads.getId());
+        return  "/ads/avatars2/" + String.valueOf(ads.getId());
     }
 
+    // Методы для преобразования объявления в DTO
     public static FullAdsDto mapToFullAdDto(Ads ads) {
         return new FullAdsDto(ads.getId(),
                 ads.getAuthor().getFirstName(),
@@ -78,6 +94,7 @@ public class    Ads {
                 ads.getTitle());
     }
 
+    // Методы для добавления и удаления комментариев
     public void addComment(Comment comment) {
         comments.add(comment);
     }
