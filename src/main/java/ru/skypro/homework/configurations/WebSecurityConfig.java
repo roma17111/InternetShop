@@ -19,10 +19,16 @@ import ru.skypro.homework.dto.Role;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Конфигурация веб-безопасности приложения.
+ */
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * Сервис для работы с информацией о пользователях.
+     */
     private final CustomUserDetailsService userDetailsService;
 
     private static final String[] AUTH_WHITELIST = {
@@ -32,15 +38,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/login", "/register",
             "/ads",
-            "/ads/avatars2/**"//это аватары изображений объявлений
+            "/ads/avatars2/**" // это аватары изображений объявлений
     };
 
+    /**
+     * Конфигурирует менеджер аутентификации с сервисом пользователей и кодировщиком паролей.
+     *
+     * @param auth менеджер аутентификации
+     * @throws Exception если возникает ошибка при настройке параметров безопасности
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * Конфигурирует параметры безопасности HTTP-запросов.
+     *
+     * @param http объект для настройки параметров безопасности
+     * @throws Exception если возникает ошибка при настройке параметров безопасности
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -48,17 +66,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads**", "/users/**").authenticated()
+                                .mvcMatchers("/ads/**", "/users/**").authenticated()
                 )
                 .cors().and()
                 .httpBasic(withDefaults()).userDetailsService(userDetailsService);
-
     }
 
+    /**
+     * Создает и возвращает объект для кодирования паролей.
+     *
+     * @return кодировщик паролей
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
-
 }
-
