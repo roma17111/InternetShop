@@ -20,4 +20,6 @@ public interface AvatarService {
     byte[] getAvatarImage(long avatarId) throws ExecutionException, InterruptedException;
 
     Resource getAvatarResource(long avatarId) throws JSchException, SftpException, IOException, ExecutionException, InterruptedException;
+
+    byte[] compressImage(MultipartFile mpFile);
 }

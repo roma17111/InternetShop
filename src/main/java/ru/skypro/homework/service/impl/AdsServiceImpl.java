@@ -195,7 +195,7 @@ public class AdsServiceImpl implements AdsService {
         Ads ads1 = new Ads(properties.getPrice(),
                 properties.getTitle(),
                 properties.getDescription());
-        byte[] i = image.getBytes();
+        byte[] i = avatarService.compressImage(image);
         ads1.setImage(i);
         addAd(ads1);
         log.info("added ads - " + ads1);
@@ -227,7 +227,7 @@ public class AdsServiceImpl implements AdsService {
     public void updateAdImageFromAuthUser(long id,
                                           MultipartFile image) {
         Ads ads = findById(id);
-        byte[] i = image.getBytes();
+        byte[] i = avatarService.compressImage(image);
         ads.setImage(i);
         updateAd(ads);
         Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));

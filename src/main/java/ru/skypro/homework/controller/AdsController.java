@@ -16,6 +16,7 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.AvatarService;
 
+import javax.servlet.annotation.MultipartConfig;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -98,6 +99,7 @@ public class AdsController {
      * @param properties свойства объявления
      * @return созданное объявление
      */
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавить объявление")
     @ApiResponse(responseCode = "201", description = "Created")

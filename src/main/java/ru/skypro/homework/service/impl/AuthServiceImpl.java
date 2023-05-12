@@ -126,7 +126,7 @@ public class AuthServiceImpl implements AuthService {
     public void updateUserImage(MultipartFile image) {
         String email = getEmailFromAuthUser();
         UserInfo userInfo = getByUserName(email);
-        byte[] i = image.getBytes();
+        byte[] i = avatarService.compressImage(image);
         userInfo.setImage(i);
         saveUser(userInfo);
         Avatar avatar = avatarService.testSave(image, MediaType.parseMediaType(Objects.requireNonNull(image.getContentType())));
