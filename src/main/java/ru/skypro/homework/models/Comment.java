@@ -50,7 +50,7 @@ public class Comment {
     /**
      * Дата создания комментария.
      */
-    long date = (LocalDateTime.now().toInstant(ZoneOffset.ofHours(3)).toEpochMilli());
+    long date = (LocalDateTime.now().toInstant(ZoneOffset.of("Europe/Moscow")).toEpochMilli());
 
     /**
      * ID комментария.
