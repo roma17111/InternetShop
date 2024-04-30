@@ -20,9 +20,7 @@ import static ru.skypro.homework.dto.Role.USER;
  * Контроллер для аутентификации и регистрации пользователей.
  */
 @Log4j2
-@CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru",
-        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
+@CrossOrigin(value = {"*"})
 @RestController
 @RequiredArgsConstructor
 public class AuthController {

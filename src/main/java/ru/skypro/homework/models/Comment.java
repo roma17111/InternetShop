@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.skypro.homework.dto.CommentDto;
 
 import javax.persistence.*;
+import javax.xml.datatype.Duration;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -50,7 +51,7 @@ public class Comment {
     /**
      * Дата создания комментария.
      */
-    long date = (LocalDateTime.now().toInstant(ZoneOffset.of("Europe/Moscow")).toEpochMilli());
+    long date = System.currentTimeMillis();
 
     /**
      * ID комментария.

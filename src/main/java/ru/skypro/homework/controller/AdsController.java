@@ -24,9 +24,7 @@ import java.util.concurrent.ExecutionException;
  * Контроллер для работы с объявлениями и комментариями.
  */
 @Log4j2
-@CrossOrigin(value = {"http://localhost:3000",
-        "http://java-mouse.ru",
-        "http://ovz3.j04912775.wmekm.vps.myjino.ru"})
+@CrossOrigin(value = {"*"})
 @RestController
 @RequestMapping("/ads")
 @RequiredArgsConstructor

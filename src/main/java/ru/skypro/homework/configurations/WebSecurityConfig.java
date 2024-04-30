@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/login", "/register",
             "/ads",
+            "/ads/comments/avatars2/**",
             "/ads/avatars2/**"//это аватары изображений объявлений
     };
 
@@ -66,9 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/ads/**", "/users/**")
+                                .authenticated()
                 )
-                .cors().and()
+                .cors(Customizer.withDefaults())
                 .httpBasic(withDefaults()).userDetailsService(userDetailsService);
 
     }
